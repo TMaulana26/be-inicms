@@ -62,5 +62,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('bulk-toggle-status', 'bulkToggleStatus');
     });
     Route::apiResource('permissions', \App\Http\Controllers\PermissionController::class);
+
+    // Media Routes
+    Route::apiResource('media', \App\Http\Controllers\MediaController::class)->only(['index', 'store', 'destroy']);
 });
 

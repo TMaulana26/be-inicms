@@ -11,11 +11,14 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\CustomVerifyEmail;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles, TwoFactorAuthenticatable, InteractsWithMedia;
 
     /**
      * Send the email verification notification.
@@ -24,8 +27,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new CustomVerifyEmail);
     }
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles;
+
+    /**
+     * Register media conversions for Spatie Media Library.
+     */
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumbnail')
+            ->width(200)
+            ->format('webp')
+            ->nonQueued();
+
+        $this->addMediaConversion('preview')
+            ->width(800)
+            ->format('webp')
+            ->nonQueued();
+    }
 
     /**
      * The attributes that are mass assignable.

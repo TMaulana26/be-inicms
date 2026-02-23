@@ -93,5 +93,14 @@ The application employs Spatie's Permission package configured over an API.
 ### Response Conventions
 Endpoints involving bulk operations (e.g., toggling the active status of multiple users) heavily utilize a standard bulk response trait to communicate exactly which operations succeeded and which specifically failed.
 
+## 🖼️ Headless Media & Asset Management
+
+A centralized "Smart Local Storage" system powered by `spatie/laravel-medialibrary` handles all asset uploads.
+
+- **Unified Endpoint**: `POST /api/media` accepts standard `multipart/form-data` file uploads.
+- **Auto-Optimization**: Uploaded images are instantly intercepted, converted into `.webp` format using `spatie/image`, and compressed to save massive amounts of local disk space.
+- **Responsive Variants**: Along with the original file, the system automatically generates lightweight `thumbnail` (200px) and `preview` (800px) copies.
+- **Polymorphic Storage**: Every media item generates a unique `id` which can later be attached polymorphically to any future model (Avatars, Blog Posts, Product Images).
+
 ---
 *Created and maintained by the INI CMS Development Team.*
