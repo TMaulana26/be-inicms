@@ -1,59 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# INI CMS Backend (API)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, headless Content Management System backend built with Laravel 11. This repository serves as the core API, providing robust authentication, granular role-based access control (RBAC), and essential CMS features.
 
-## About Laravel
+## 🚀 Built With
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **[Laravel 11](https://laravel.com/)** - The PHP Framework for Web Artisans
+- **[Laravel Sanctum](https://laravel.com/docs/sanctum)** - Featherweight API Authentication
+- **[Spatie Permission](https://spatie.be/docs/laravel-permission)** - Granular Role & Permission Management
+- **[Scramble](https://scramble.dedoc.co/)** - Modern OpenAPI (Swagger) Documentation Generation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ⚙️ Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before you begin, ensure you have the following installed matching these requirements:
 
-## Learning Laravel
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL, PostgreSQL, or SQLite
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🛠️ Local Development Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd be-inicms
+   ```
 
-## Laravel Sponsors
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Set up Environment Variables**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   > **Important Configuration:** Ensure your database credentials in `.env` are correct. For email verification to work locally, set `QUEUE_CONNECTION=sync` and configure your SMTP credentials (e.g. Google App Passwords). Set `FRONTEND_URL` to point to your local frontend application.
 
-### Premium Partners
+4. **Run Migrations and Seeders**
+   ```bash
+   php artisan migrate --seed
+   ```
+   *(Assuming seeders exist for initial roles and an admin account)*
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. **Start the Development Server**
+   ```bash
+   npm install && npm run dev
+   ```
+   Alternatively, you can manually start the server:
+   ```bash
+   php artisan serve
+   ```
 
-## Contributing
+## 📚 API Documentation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This project utilizes **Scramble** to automatically generate comprehensive OpenAPI documentation. 
 
-## Code of Conduct
+Once your local server is running, you can access the interactive Swagger UI here:
+👉 `http://localhost:8000/docs/api`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+*The API documentation is always synchronized with the current codebase, meaning you'll see exact request bodies, query parameters, headers, and response formats instantly.*
 
-## Security Vulnerabilities
+## 🔒 Authentication Flow
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+This platform uses a purely API-driven (Headless) approach to authentication via Laravel Sanctum. No traditional browser sessions or blade views are utilized.
 
-## License
+### 1. Standard Login with "Remember Me"
+- Endpoint: `POST /api/login`
+- Provides your email and password.
+- Optionally include `"remember": true` to receive a token valid for **1 Year** instead of the standard 60 minutes.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Email Verification
+Users must verify their email addresses.
+- Registration will automatically send an email to the user.
+- The link in the email is a cryptographically signed URL pointing to the `FRONTEND_URL`.
+- The frontend will extract the parameters (`id`, `hash`, `expires`, `signature`) from the URL and transmit them to `GET /api/email/verify/{id}/{hash}` to officially verify the account.
+
+### 3. Two-Factor Authentication (2FA)
+Verified users can opt in to 2FA for maximum security.
+- **Enable:** `POST /api/2fa/enable` (returns QR Code SVG and Recovery Codes).
+- **Confirm:** `POST /api/2fa/confirm` (validates the first code to activate).
+- **The Challenge:** If 2FA is active, an attempt to log in using `POST /api/login` will return a `requires_2fa: true` flag along with a temporary 10-minute token restricted absolutely to the `['2fa']` ability.
+- **Completion:** Supply this temporary token to `POST /api/login/2fa-challenge` along with your Authenticator code to unlock a full-access token.
+
+## 👥 Role-Based Access Control (RBAC)
+
+The application employs Spatie's Permission package configured over an API.
+- We rely on `name` instead of `id` for role and permission assignments, making payload definitions robust against dynamic environments.
+- Granular endpoints are available to **assign**, **remove**, and fully **sync** roles to users.
+
+### Response Conventions
+Endpoints involving bulk operations (e.g., toggling the active status of multiple users) heavily utilize a standard bulk response trait to communicate exactly which operations succeeded and which specifically failed.
+
+---
+*Created and maintained by the INI CMS Development Team.*
