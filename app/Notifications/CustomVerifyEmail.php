@@ -44,7 +44,7 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
         // e.g. FRONTEND_URL=http://localhost:3000
         $frontendUrl = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:3000')), '/');
 
-        return "{$frontendUrl}/verify-email?id={$id}&hash={$hash}&{$queryString}";
+        return "{$frontendUrl}/verify-email?{$queryString}";
     }
 
     /**

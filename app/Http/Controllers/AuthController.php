@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\AuthService;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -14,7 +16,8 @@ class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService
-    ) {}
+    ) {
+    }
 
     /**
      * Register a new user.
@@ -72,25 +75,29 @@ class AuthController extends Controller
      * @queryParam expires integer required The expiration timestamp of the verification link.
      * @queryParam signature string required The cryptographic signature validating the link.
      */
-    public function verifyEmail(\App\Http\Requests\Auth\VerifyEmailRequest $request, $id, $hash): JsonResponse
+    public function verifyEmail(\App\Http\Requests\Auth\VerifyEmailRequest $request): JsonResponse
     {
-        $user = User::withoutGlobalScopes()->findOrFail($id);
+        $user = User::withoutGlobalScopes()->findOrFail($request->id);
 
-        // This validates the signature timestamp
-        if (! $request->hasValidSignature()) {
-            return $this->errorResponse('Invalid or expired verification link.', 403);
+        if ($request->expires < now()->getTimestamp()) {
+            return $this->errorResponse('Verification link has expired.', 403);
+        }
+
+        if (! hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
+            return $this->errorResponse('Invalid verification link.', 403);
         }
 
         if ($user->hasVerifiedEmail()) {
             return $this->errorResponse('Email is already verified.', 400);
         }
 
-        if ($this->authService->verifyEmail($user, $hash)) {
+        if ($this->authService->verifyEmail($user, $request->hash)) {
             return $this->successResponse(null, 'Email verified successfully.');
         }
 
         return $this->errorResponse('Email could not be verified.', 500);
     }
+
 
     /**
      * Resend the email verification notification.
@@ -104,5 +111,34 @@ class AuthController extends Controller
         }
 
         return $this->errorResponse('Email is already verified.', 400);
+    }
+
+    /**
+     * Send a reset link to the given user.
+     */
+    public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
+    {
+        $status = $this->authService->forgotPassword($request->only('email'));
+
+        return $status === \Illuminate\Support\Facades\Password::RESET_LINK_SENT
+            ? $this->successResponse(null, __($status))
+            : $this->errorResponse(__($status), 400);
+    }
+
+    /**
+     * Reset the user's password.
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        $status = $this->authService->resetPassword($request->only(
+            'email',
+            'password',
+            'password_confirmation',
+            'token'
+        ));
+
+        return $status === \Illuminate\Support\Facades\Password::PASSWORD_RESET
+            ? $this->successResponse(null, __($status))
+            : $this->errorResponse(__($status), 400);
     }
 }

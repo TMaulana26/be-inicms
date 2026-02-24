@@ -14,6 +14,8 @@ class VerifyEmailRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'hash' => ['required', 'string'],
+            'id' => ['required', 'string'],
             'expires' => ['required', 'string'],
             'signature' => ['required', 'string'],
         ];

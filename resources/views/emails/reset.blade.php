@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Verify Your Email</title>
+    <title>Reset Password</title>
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -117,19 +117,25 @@
     <div class="wrapper">
         <div class="container">
             <div class="header">
-                Welcome to IniCMS!
+                Reset Your Password
             </div>
             <div class="content">
-                <p>Hello {{ $user->name }},</p>
-                <p>Please click the button below to verify your email address and activate your account.</p>
+                <p>Hello,</p>
+                <p>You are receiving this email because we received a password reset request for your account.</p>
 
-                <a href="{{ $url }}" class="button">Verify Email Address</a>
+                <a href="{{ $url }}" class="button">Reset Password</a>
 
                 <div class="alert-box">
                     <p>
-                        <strong>Note:</strong> If you did not create an account, no further action is required.
+                        <strong>Note:</strong> This password reset link will expire in
+                        {{ config('auth.passwords.' . config('auth.defaults.passwords') . '.expire') }} minutes.
                     </p>
                 </div>
+
+                <p style="font-size: 14px; margin-top: 30px;">
+                    If you did not request a password reset, no further action is required and your account is
+                    completely safe.
+                </p>
 
                 <div class="link-text">
                     Button not working? Copy and paste this link into your browser:<br><br>
