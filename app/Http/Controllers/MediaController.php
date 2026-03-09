@@ -2,28 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Media\IndexMediaRequest;
 use App\Http\Requests\Media\StoreMediaRequest;
+use App\Http\Requests\Media\UpdateMediaRequest;
 use App\Models\Media;
 use App\Services\MediaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\MediaResource;
+use App\Traits\HandlesBulkAndSoftDeletes;
 
 class MediaController extends Controller
 {
+    use HandlesBulkAndSoftDeletes;
+
     public function __construct(
         protected MediaService $mediaService
     ) {}
+
+    protected function getService()
+    {
+        return $this->mediaService;
+    }
+
+    protected function getResourceClass(): string
+    {
+        return MediaResource::class;
+    }
+
+    protected function getModelName(): string
+    {
+        return 'media';
+    }
 
     /**
      * Display a paginated listing of all media.
      * Useful for building a generic "Media Library" UI.
      */
-    public function index(Request $request): JsonResponse
+    public function index(IndexMediaRequest $request): JsonResponse
     {
-        // Spatie's generic media model
-        $mediaModel = config('media-library.media_model');
-        $media = $mediaModel::latest()->paginate($request->get('per_page', 24));
+        $media = $this->mediaService->index($request->all());
 
         return $this->paginatedResponse(
             MediaResource::collection($media),
@@ -41,7 +59,8 @@ class MediaController extends Controller
         $media = $this->mediaService->upload(
             $user,
             $request->file('file'),
-            $request->input('collection', 'default')
+            $request->input('collection', 'default'),
+            $request->input('name')
         );
 
         return $this->resourceResponse(
@@ -52,12 +71,49 @@ class MediaController extends Controller
     }
 
     /**
-     * Remove the specified media from storage.
+     * Display the specified media.
+     */
+    public function show(Media $media): JsonResponse
+    {
+        return $this->resourceResponse(
+            new MediaResource($media),
+            'Media details retrieved successfully.'
+        );
+    }
+
+    /**
+     * Update the specified media.
+     */
+    public function update(UpdateMediaRequest $request, Media $media): JsonResponse
+    {
+        $media = $this->mediaService->update($media, $request->validated());
+
+        return $this->resourceResponse(
+            new MediaResource($media),
+            'Media updated successfully.'
+        );
+    }
+
+    /**
+     * Remove the specified media from storage (Soft Delete).
      */
     public function destroy(Media $media): JsonResponse
     {
         $this->mediaService->delete($media);
 
-        return $this->successResponse(null, 'Media deleted successfully.');
+        return $this->resourceResponse(new MediaResource($media), 'Media deleted successfully.');
+    }
+
+    /**
+     * Toggle active status.
+     */
+    public function toggleStatus(Media $media): JsonResponse
+    {
+        $media = $this->mediaService->toggleStatus($media);
+
+        return $this->resourceResponse(
+            new MediaResource($media),
+            'Media status toggled successfully.'
+        );
     }
 }

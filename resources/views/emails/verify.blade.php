@@ -117,6 +117,7 @@
     <div class="wrapper">
         <div class="container">
             <div class="header">
+                <img src="{{ asset('assets/Logo.svg') }}" alt="IniCMS Logo" style="width: 100px; max-width: 100%; height: auto; display: block; margin: 0 auto 15px;">
                 Welcome to IniCMS!
             </div>
             <div class="content">

@@ -22,9 +22,11 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_active' => $this->is_active,
+            'profile_picture_url' => $this->getFirstMediaUrl('profile_picture', 'thumbnail') ?: $this->getFirstMediaUrl('profile_picture'),
             'roles' => $this->whenLoaded('roles', fn() => $this->getRoleNames()),
             'permissions' => $this->whenLoaded('permissions', fn() => $this->getAllPermissions()->pluck('name')),
             'deleted_at' => $this->whenNotNull($this->deleted_at),
+            'two_factor_confirmed_at' => $this->two_factor_confirmed_at,
         ];
     }
 }

@@ -15,6 +15,7 @@ class StorePermissionRequest extends FormRequest
     {
         return [
             'name' => 'required|string|unique:permissions,name',
+            'menu' => 'nullable|string|max:255',
         ];
     }
 }

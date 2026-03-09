@@ -24,7 +24,10 @@ class MediaResource extends JsonResource
             'url' => $this->getUrl(),
             'thumbnail_url' => $this->hasGeneratedConversion('thumbnail') ? $this->getUrl('thumbnail') : null,
             'preview_url' => $this->hasGeneratedConversion('preview') ? $this->getUrl('preview') : null,
+            'is_active' => $this->is_active,
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

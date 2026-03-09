@@ -15,12 +15,25 @@ class IndexPermissionRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('with_roles')) {
+            $this->merge([
+                'with_roles' => filter_var($this->with_roles, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
         return [
-            'per_page' => 'integer|min:1|max:100|nullable',
+            'trashed' => 'in:only,with|nullable',
+            'per_page' => 'integer|min:-1|max:1000|nullable',
             'sort_by' => 'string|in:id,name,guard_name,created_at|nullable',
             'sort_order' => 'in:asc,desc|nullable',
             'search' => 'string|nullable|max:255',

@@ -18,22 +18,25 @@ class RoleAndPermissionSeeder extends Seeder
 
         // 1. Define standard CMS permissions
         $permissions = [
-            'view users',
-            'create users',
-            'edit users',
-            'delete users',
-            'view roles',
-            'manage roles',
-            'view permissions',
-            'manage permissions',
-            'view media',
-            'upload media',
-            'delete media',
+            'view users' => 'User',
+            'create users' => 'User',
+            'edit users' => 'User',
+            'delete users' => 'User',
+            'view roles' => 'Role',
+            'manage roles' => 'Role',
+            'view permissions' => 'Permission',
+            'manage permissions' => 'Permission',
+            'view media' => 'Media',
+            'upload media' => 'Media',
+            'delete media' => 'Media',
         ];
 
         // 2. Create permissions
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+        foreach ($permissions as $name => $menu) {
+            Permission::updateOrCreate(
+                ['name' => $name],
+                ['menu' => $menu]
+            );
         }
 
         // 3. Create roles and assign permissions

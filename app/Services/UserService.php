@@ -8,25 +8,37 @@ use Illuminate\Http\Request;
 
 class UserService
 {
+    /**
+     * Find a user by its ID.
+     */
+    public function findById(string $id): User
+    {
+        return User::findOrFail($id);
+    }
 
     /**
      * Display a listing of the users resource.
      */
     public function index(array $params)
     {
-        return User::query()
-            ->when($params['trashed'] ?? null === 'only', fn($query) => $query->onlyTrashed())
-            ->when($params['trashed'] ?? null === 'with', fn($query) => $query->withTrashed())
-            ->when($params['status'] ?? null, function ($query, $status) {
-                $query->where('is_active', $status === 'active');
+        $query = User::query()
+            ->when($params['trashed'] ?? null === 'only', fn($q) => $q->onlyTrashed())
+            ->when($params['trashed'] ?? null === 'with', fn($q) => $q->withTrashed())
+            ->when($params['status'] ?? null, function ($q, $status) {
+                $q->where('is_active', $status === 'active');
             })
-            ->when($params['search'] ?? null, function ($query, $search) {
-                $query->where(fn($q) => $q->where('name', 'like', "%{$search}%")
+            ->when($params['search'] ?? null, function ($q, $search) {
+                $q->where(fn($subQ) => $subQ->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%"));
             })
-            ->orderBy($params['sort_by'] ?? 'id', $params['sort_order'] ?? 'asc')
-            ->paginate($params['per_page'] ?? 10)
-            ->withQueryString();
+            ->orderBy($params['sort_by'] ?? 'id', $params['sort_order'] ?? 'asc');
+
+        $perPage = $params['per_page'] ?? 10;
+        if ((int)$perPage === -1) {
+            $perPage = $query->count() > 0 ? $query->count() : 1;
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -41,6 +53,12 @@ class UserService
                 $user->syncRoles($data['roles']);
             }
 
+            if (isset($data['profile_picture'])) {
+                $user->addMedia($data['profile_picture'])
+                    ->usingName($data['profile_picture_name'] ?? $user->name)
+                    ->toMediaCollection('profile_picture');
+            }
+
             return $user->refresh();
         });
     }
@@ -53,8 +71,19 @@ class UserService
         return DB::transaction(function () use ($user, $data) {
             $user->update($data);
 
+            if (isset($data['email'])) {
+                $user->email_verified_at = null;
+                $user->save();
+            }
+
             if (isset($data['roles'])) {
                 $user->syncRoles($data['roles']);
+            }
+
+            if (isset($data['profile_picture'])) {
+                $user->addMedia($data['profile_picture'])
+                    ->usingName($data['profile_picture_name'] ?? $user->name)
+                    ->toMediaCollection('profile_picture');
             }
 
             return $user->refresh();

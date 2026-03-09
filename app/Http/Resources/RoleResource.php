@@ -16,7 +16,14 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'guard_name' => $this->guard_name,
-            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
+            'users' => $this->whenLoaded('users', fn() => $this->users->map(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+            ])),
+            'permissions' => $this->whenLoaded('permissions', fn() => $this->permissions->map(fn($permission) => [
+                'id' => $permission->id,
+                'name' => $permission->name,
+            ])),
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
         ];

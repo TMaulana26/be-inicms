@@ -6,15 +6,39 @@ use App\Models\Permission;
 use App\Http\Requests\Permission\StorePermissionRequest;
 use App\Http\Requests\Permission\UpdatePermissionRequest;
 use App\Http\Requests\Permission\IndexPermissionRequest;
+use App\Http\Requests\Permission\AssignRoleRequest;
 use App\Http\Resources\PermissionResource;
-use App\Http\Requests\Shared\BulkRequest;
+use App\Services\PermissionService;
+use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
 
 class PermissionController extends Controller
 {
+    use HandlesBulkAndSoftDeletes;
+
     public function __construct(
-        protected \App\Services\PermissionService $permissionService
+        protected PermissionService $permissionService
     ) {}
+
+    protected function getService()
+    {
+        return $this->permissionService;
+    }
+
+    protected function getResourceClass(): string
+    {
+        return PermissionResource::class;
+    }
+
+    protected function getModelName(): string
+    {
+        return 'permission';
+    }
+
+    protected function getEagerLoadRelations(): array
+    {
+        return ['roles'];
+    }
 
     /**
      * Display a listing of permissions.
@@ -72,6 +96,16 @@ class PermissionController extends Controller
     }
 
     /**
+     * Remove the specified permission (Soft Delete).
+     */
+    public function destroy(Permission $permission): JsonResponse
+    {
+        $permission->delete();
+
+        return $this->resourceResponse(new PermissionResource($permission), 'Permission deleted successfully.');
+    }
+
+    /**
      * Toggle active status.
      */
     public function toggleStatus(Permission $permission): JsonResponse
@@ -85,22 +119,41 @@ class PermissionController extends Controller
     }
 
     /**
-     * Bulk toggle active status.
+     * Sync roles to the specified permission (Replace existing).
      */
-    public function bulkToggleStatus(BulkRequest $request): JsonResponse
+    public function syncRoles(AssignRoleRequest $request, Permission $permission): JsonResponse
     {
-        $result = $this->permissionService->handleBulkOperation($request->validated()['ids'], 'toggle');
+        $permission = $this->permissionService->syncRoles($permission, $request->validated()['roles']);
 
-        return $this->bulkResponse($result, 'status toggled', PermissionResource::class, 'permission', ['roles']);
+        return $this->resourceResponse(
+            new PermissionResource($permission->load('roles')),
+            'Roles synced successfully.'
+        );
     }
 
     /**
-     * Remove the specified permission.
+     * Assign roles to the specified permission (Additive).
      */
-    public function destroy(Permission $permission): JsonResponse
+    public function assignRoles(AssignRoleRequest $request, Permission $permission): JsonResponse
     {
-        $permission->delete();
+        $permission = $this->permissionService->assignRoles($permission, $request->validated()['roles']);
 
-        return $this->resourceResponse(new PermissionResource($permission), 'Permission deleted successfully.');
+        return $this->resourceResponse(
+            new PermissionResource($permission->load('roles')),
+            'Roles assigned successfully.'
+        );
+    }
+
+    /**
+     * Remove roles from the specified permission.
+     */
+    public function removeRoles(AssignRoleRequest $request, Permission $permission): JsonResponse
+    {
+        $permission = $this->permissionService->removeRoles($permission, $request->validated()['roles']);
+
+        return $this->resourceResponse(
+            new PermissionResource($permission->load('roles')),
+            'Roles removed successfully.'
+        );
     }
 }

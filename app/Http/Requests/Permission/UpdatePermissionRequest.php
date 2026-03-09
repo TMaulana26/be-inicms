@@ -18,6 +18,7 @@ class UpdatePermissionRequest extends FormRequest
 
         return [
             'name' => 'sometimes|string|unique:permissions,name,' . $id,
+            'menu' => 'nullable|string|max:255',
         ];
     }
 }

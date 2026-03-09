@@ -5,16 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
-use App\Http\Resources\RoleResource;
 use App\Http\Requests\Role\IndexRoleRequest;
-use App\Http\Requests\Shared\BulkRequest;
+use App\Http\Requests\Role\AssignPermissionRequest;
+use App\Http\Resources\RoleResource;
+use App\Services\RoleService;
+use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
 
 class RoleController extends Controller
 {
+    use HandlesBulkAndSoftDeletes;
+
     public function __construct(
-        protected \App\Services\RoleService $roleService
+        protected RoleService $roleService
     ) {}
+
+    protected function getService()
+    {
+        return $this->roleService;
+    }
+
+    protected function getResourceClass(): string
+    {
+        return RoleResource::class;
+    }
+
+    protected function getModelName(): string
+    {
+        return 'role';
+    }
+
+    protected function getEagerLoadRelations(): array
+    {
+        return ['permissions'];
+    }
 
     /**
      * Display a listing of roles.
@@ -25,6 +49,10 @@ class RoleController extends Controller
 
         if ($request->get('with_permissions', false)) {
             $roles->load('permissions');
+        }
+
+        if ($request->get('with_users', false)) {
+            $roles->load('users');
         }
 
         return $this->paginatedResponse(
@@ -53,7 +81,7 @@ class RoleController extends Controller
     public function show(Role $role): JsonResponse
     {
         return $this->resourceResponse(
-            new RoleResource($role->load('permissions')),
+            new RoleResource($role->load('permissions', 'users')),
             'Role details retrieved successfully.'
         );
     }
@@ -72,6 +100,16 @@ class RoleController extends Controller
     }
 
     /**
+     * Remove the specified role (Soft Delete).
+     */
+    public function destroy(Role $role): JsonResponse
+    {
+        $role->delete();
+
+        return $this->resourceResponse(new RoleResource($role), 'Role deleted successfully.');
+    }
+
+    /**
      * Toggle active status.
      */
     public function toggleStatus(Role $role): JsonResponse
@@ -85,22 +123,41 @@ class RoleController extends Controller
     }
 
     /**
-     * Bulk toggle active status.
+     * Sync permissions to the specified role (Replace existing).
      */
-    public function bulkToggleStatus(BulkRequest $request): JsonResponse
+    public function syncPermissions(AssignPermissionRequest $request, Role $role): JsonResponse
     {
-        $result = $this->roleService->handleBulkOperation($request->validated()['ids'], 'toggle');
+        $role = $this->roleService->syncPermissions($role, $request->validated()['permissions']);
 
-        return $this->bulkResponse($result, 'status toggled', RoleResource::class, 'role', ['permissions']);
+        return $this->resourceResponse(
+            new RoleResource($role->load('permissions')),
+            'Permissions synced successfully.'
+        );
     }
 
     /**
-     * Remove the specified role.
+     * Give permissions to the specified role (Additive).
      */
-    public function destroy(Role $role): JsonResponse
+    public function givePermissions(AssignPermissionRequest $request, Role $role): JsonResponse
     {
-        $role->delete();
+        $role = $this->roleService->givePermissions($role, $request->validated()['permissions']);
 
-        return $this->resourceResponse(new RoleResource($role), 'Role deleted successfully.');
+        return $this->resourceResponse(
+            new RoleResource($role->load('permissions')),
+            'Permissions given successfully.'
+        );
+    }
+
+    /**
+     * Revoke permissions from the specified role.
+     */
+    public function revokePermissions(AssignPermissionRequest $request, Role $role): JsonResponse
+    {
+        $role = $this->roleService->revokePermissions($role, $request->validated()['permissions']);
+
+        return $this->resourceResponse(
+            new RoleResource($role->load('permissions')),
+            'Permissions revoked successfully.'
+        );
     }
 }

@@ -21,7 +21,7 @@ class IndexUserRequest extends FormRequest
     {
         return [
             'trashed' => 'in:only,with|nullable',
-            'per_page' => 'integer|min:1|max:100|nullable',
+            'per_page' => 'integer|min:-1|max:1000|nullable',
             'sort_by' => 'string|in:id,name,email,created_at,is_active|nullable',
             'sort_order' => 'in:asc,desc|nullable',
             'search' => 'string|nullable|max:255',

@@ -5,19 +5,39 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Requests\Shared\BulkRequest;
 use App\Http\Requests\User\IndexUserRequest;
+use App\Http\Requests\User\AssignRoleRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
+use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
-
-use App\Http\Requests\User\AssignRoleRequest;
 
 class UserController extends Controller
 {
+    use HandlesBulkAndSoftDeletes;
+
     public function __construct(
         protected UserService $userService
-    ) {
+    ) {}
+
+    protected function getService()
+    {
+        return $this->userService;
+    }
+
+    protected function getResourceClass(): string
+    {
+        return UserResource::class;
+    }
+
+    protected function getModelName(): string
+    {
+        return 'user';
+    }
+
+    protected function getEagerLoadRelations(): array
+    {
+        return ['roles', 'permissions'];
     }
 
     /**
@@ -84,19 +104,6 @@ class UserController extends Controller
     }
 
     /**
-     * Restore the specified soft-deleted user resource.
-     */
-    public function restore(string $id): JsonResponse
-    {
-        $user = $this->userService->restore($id);
-
-        return $this->resourceResponse(
-            new UserResource($user),
-            'User restored successfully.'
-        );
-    }
-
-    /**
      * Toggle the active status of the specified user.
      */
     public function toggleStatus(User $user): JsonResponse
@@ -107,59 +114,6 @@ class UserController extends Controller
             new UserResource($user),
             'User status toggled successfully.'
         );
-    }
-
-    /**
-     * Permanently remove the specified user resource from storage.
-     */
-    public function forceDelete(string $id): JsonResponse
-    {
-        $user = $this->userService->forceDelete($id);
-
-        return $this->resourceResponse(
-            new UserResource($user),
-            'User permanently deleted.'
-        );
-    }
-
-    /**
-     * Remove multiple users from storage (Soft Delete).
-     */
-    public function bulkDestroy(BulkRequest $request): JsonResponse
-    {
-        $result = $this->userService->handleBulkOperation($request->validated()['ids'], 'delete');
-
-        return $this->bulkResponse($result, 'deleted', UserResource::class, 'user', ['roles', 'permissions']);
-    }
-
-    /**
-     * Toggle active status for multiple users.
-     */
-    public function bulkToggleStatus(BulkRequest $request): JsonResponse
-    {
-        $result = $this->userService->handleBulkOperation($request->validated()['ids'], 'toggle');
-
-        return $this->bulkResponse($result, 'status toggled', UserResource::class, 'user', ['roles', 'permissions']);
-    }
-
-    /**
-     * Restore multiple soft-deleted users.
-     */
-    public function bulkRestore(BulkRequest $request): JsonResponse
-    {
-        $result = $this->userService->handleBulkOperation($request->validated()['ids'], 'restore');
-
-        return $this->bulkResponse($result, 'restored', UserResource::class, 'user', ['roles', 'permissions']);
-    }
-
-    /**
-     * Permanently remove multiple users from storage.
-     */
-    public function bulkForceDelete(BulkRequest $request): JsonResponse
-    {
-        $result = $this->userService->handleBulkOperation($request->validated()['ids'], 'forceDelete');
-
-        return $this->bulkResponse($result, 'permanently deleted', UserResource::class, 'user', ['roles', 'permissions']);
     }
 
     /**
@@ -200,5 +154,4 @@ class UserController extends Controller
             'Roles removed successfully.'
         );
     }
-
 }

@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles, TwoFactorAuthenticatable, InteractsWithMedia;
 
+    protected $guard_name = 'web';
+
     /**
      * Send the email verification notification.
      */
@@ -53,6 +55,16 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
             ->width(800)
             ->format('webp')
             ->nonQueued();
+    }
+
+    /**
+     * Register media collections.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('profile_picture')
+            ->singleFile()
+            ->useDisk('public');
     }
 
     /**
