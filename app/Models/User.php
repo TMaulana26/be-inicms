@@ -15,11 +15,12 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasActiveStatus;
 
 class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles, TwoFactorAuthenticatable, InteractsWithMedia;
+    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles, TwoFactorAuthenticatable, InteractsWithMedia, HasActiveStatus;
 
     protected $guard_name = 'web';
 

@@ -1,6 +1,6 @@
 # INI CMS - API Development Guide
 
-This guide explains how to quickly build robust CRUD API endpoints in the INI CMS backend. We use the `HandlesBulkAndSoftDeletes` trait to handle complex and repetitive logic, while explicitly defining standard CRUD endpoints to ensure perfect API Documentation generation via Dedoc/Scramble.
+This guide explains how to quickly build robust CRUD API endpoints in the INI CMS backend. We use the `HandlesBulkAndSoftDeletes` and `HandlesIndexQuery` traits to handle complex and repetitive logic, while explicitly defining standard CRUD endpoints to ensure perfect API Documentation generation via Dedoc/Scramble.
 
 By utilizing the `HandlesBulkAndSoftDeletes` trait, you instantly get the following endpoints for free:
 - `PATCH /api/resource/{id}/restore` (Restore a soft-deleted record)
@@ -56,12 +56,19 @@ namespace App\Services;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 
+use App\Traits\HandlesIndexQuery;
+
 class CategoryService
 {
+    use HandlesIndexQuery;
+
     public function index(array $params)
     {
-        return Category::query()
-            ->paginate($params['per_page'] ?? 10);
+        return $this->handleIndexQuery(
+            Category::query(),
+            $params,
+            ['name', 'description']
+        );
     }
 
     public function store(array $data): Category { /* ... */ }
@@ -173,3 +180,5 @@ Route::prefix('categories')->group(function () {
 ```
 
 That's it! By following this pattern, you ensure consistent error handling, flawless OpenAPI generation with Scramble, and drastically reduced boilerplate code across the entire INI CMS.
+
+For more detailed information on listing endpoints, see the [Index Query Guide](./INDEX_QUERY_GUIDE.md).

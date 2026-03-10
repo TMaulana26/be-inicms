@@ -21,10 +21,23 @@ This guide outlines the available endpoints for managing media in the applicatio
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `DELETE` | `/media/bulk/delete` | Soft delete multiple media items. |
-| `POST` | `/media/bulk/restore` | Restore multiple soft-deleted media items. |
-| `PATCH` | `/media/bulk/toggle-status` | Toggle status for multiple media items. |
-| `DELETE` | `/media/bulk/force-delete` | Permanently delete multiple media items. |
+| `POST` | `/media/bulk-destroy` | Soft delete multiple media items. |
+| `PATCH` | `/media/bulk-restore` | Restore multiple soft-deleted media items. |
+| `PATCH` | `/media/bulk-toggle-status` | Toggle status for multiple media items. |
+| `POST` | `/media/bulk-force-delete` | Permanently delete multiple media items. |
+
+---
+
+## Query Parameters
+
+The `/media` listing endpoint supports the following parameters:
+
+- `search`: Searches in `name` and `file_name` columns.
+- `status`: Filter by `active` or `inactive`.
+- `trashed`: Filter by `only` or `with` (for soft-deleted items).
+- `per_page`: Number of items per page. Set to `-1` to return all records.
+- `sort_by`: Column to sort by (default: `id`).
+- `sort_order`: `asc` or `desc` (default: `desc`).
 
 ---
 

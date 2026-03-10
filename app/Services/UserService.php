@@ -6,8 +6,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use App\Traits\HandlesIndexQuery;
+
 class UserService
 {
+    use HandlesIndexQuery;
+
     /**
      * Find a user by its ID.
      */
@@ -21,24 +25,11 @@ class UserService
      */
     public function index(array $params)
     {
-        $query = User::query()
-            ->when($params['trashed'] ?? null === 'only', fn($q) => $q->onlyTrashed())
-            ->when($params['trashed'] ?? null === 'with', fn($q) => $q->withTrashed())
-            ->when($params['status'] ?? null, function ($q, $status) {
-                $q->where('is_active', $status === 'active');
-            })
-            ->when($params['search'] ?? null, function ($q, $search) {
-                $q->where(fn($subQ) => $subQ->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%"));
-            })
-            ->orderBy($params['sort_by'] ?? 'id', $params['sort_order'] ?? 'asc');
-
-        $perPage = $params['per_page'] ?? 10;
-        if ((int)$perPage === -1) {
-            $perPage = $query->count() > 0 ? $query->count() : 1;
-        }
-
-        return $query->paginate($perPage)->withQueryString();
+        return $this->handleIndexQuery(
+            User::query(),
+            $params,
+            ['name', 'email']
+        );
     }
 
     /**
@@ -71,7 +62,7 @@ class UserService
         return DB::transaction(function () use ($user, $data) {
             $user->update($data);
 
-            if (isset($data['email'])) {
+            if (isset($data['email']) && $data['email'] !== $user->getOriginal('email')) {
                 $user->email_verified_at = null;
                 $user->save();
             }

@@ -7,33 +7,26 @@ use Illuminate\Http\UploadedFile;
 use App\Models\Media;
 use Illuminate\Support\Facades\DB;
 
+use App\Traits\HandlesIndexQuery;
+
 class MediaService
 {
+    use HandlesIndexQuery;
+
     /**
      * Display a listing of media.
      */
     public function index(array $params)
     {
-        $perPage = $params['per_page'] ?? 24;
-
-        return Media::query()
-            ->when(($params['trashed'] ?? null) === 'only', fn($q) => $q->onlyTrashed())
-            ->when(($params['trashed'] ?? null) === 'with', fn($q) => $q->withTrashed())
-            ->when($params['status'] ?? null, function ($q, $status) {
-                $q->where('is_active', $status === 'active');
-            })
-            ->when($params['search'] ?? null, function ($q, $search) {
-                $q->where(function ($subQ) use ($search) {
-                    $subQ->where('name', 'like', "%{$search}%")
-                        ->orWhere('file_name', 'like', "%{$search}%");
-                });
-            })
-            ->when(($params['trashed'] ?? null) !== 'only' && ($params['trashed'] ?? null) !== 'with', function ($q) use ($params) {
-                $q->where('collection_name', ($params['only_profile_picture'] ?? false) ? '=' : '!=', 'profile_picture');
-            })
-            ->orderBy($params['sort_by'] ?? 'id', $params['sort_order'] ?? 'desc')
-            ->paginate((int)$perPage === -1 ? Media::count() ?: 1 : $perPage)
-            ->withQueryString();
+        return $this->handleIndexQuery(
+            Media::query(),
+            $params,
+            ['name', 'file_name'],
+            fn($q) => $q->when(($params['trashed'] ?? null) !== 'only' && ($params['trashed'] ?? null) !== 'with', function ($subQ) use ($params) {
+                $subQ->where('collection_name', ($params['only_profile_picture'] ?? false) ? '=' : '!=', 'profile_picture');
+            }),
+            24
+        );
     }
 
     /**

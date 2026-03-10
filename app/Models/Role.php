@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Spatie\Permission\Models\Role as SpatieRole;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\HasActiveStatus;
 
 class Role extends SpatieRole
 {
-    use SoftDeletes;
+    use SoftDeletes, HasActiveStatus;
 
     protected $guard_name = 'web';
 

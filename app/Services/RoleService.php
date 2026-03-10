@@ -5,8 +5,12 @@ namespace App\Services;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
+use App\Traits\HandlesIndexQuery;
+
 class RoleService
 {
+    use HandlesIndexQuery;
+
     /**
      * Find a role by its ID.
      */
@@ -20,24 +24,11 @@ class RoleService
      */
     public function index(array $params)
     {
-        $query = Role::query()
-            ->when($params['trashed'] ?? null === 'only', fn($q) => $q->onlyTrashed())
-            ->when($params['trashed'] ?? null === 'with', fn($q) => $q->withTrashed())
-            ->when($params['status'] ?? null, function ($q, $status) {
-                $q->where('is_active', $status === 'active');
-            })
-            ->when($params['search'] ?? null, function ($q, $search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('guard_name', 'like', "%{$search}%");
-            })
-            ->orderBy($params['sort_by'] ?? 'id', $params['sort_order'] ?? 'asc');
-
-        $perPage = $params['per_page'] ?? 10;
-        if ((int)$perPage === -1) {
-            $perPage = $query->count() > 0 ? $query->count() : 1;
-        }
-
-        return $query->paginate($perPage)->withQueryString();
+        return $this->handleIndexQuery(
+            Role::query(),
+            $params,
+            ['name', 'guard_name']
+        );
     }
 
     /**

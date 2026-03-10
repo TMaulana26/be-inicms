@@ -33,7 +33,7 @@ class IndexMediaRequest extends FormRequest
     {
         return [
             'trashed' => 'nullable|in:only,with',
-            'per_page' => 'nullable|integer|min:1|max:1000',
+            'per_page' => 'nullable|integer|min:-1|max:1000',
             'sort_by' => 'nullable|string|in:id,name,file_name,created_at,updated_at',
             'sort_order' => 'nullable|in:asc,desc',
             'search' => 'nullable|string|max:255',
