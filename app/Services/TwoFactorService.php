@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use Modules\Acl\Models\User;
 use Illuminate\Support\Collection;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\RecoveryCode;

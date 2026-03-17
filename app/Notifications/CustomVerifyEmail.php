@@ -22,7 +22,7 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
      */
     protected function verificationUrl($notifiable)
     {
-        if (static::$createUrlCallback) {
+        if (is_callable(static::$createUrlCallback)) {
             return call_user_func(static::$createUrlCallback, $notifiable);
         }
 
@@ -57,7 +57,7 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
     {
         $verificationUrl = $this->verificationUrl($notifiable);
 
-        if (static::$toMailCallback) {
+        if (is_callable(static::$toMailCallback)) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
         }
 

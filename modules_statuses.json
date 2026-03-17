@@ -1,0 +1,9 @@
+{
+    "TestModule": true,
+    "Acl": true,
+    "Auth": true,
+    "Menu": true,
+    "Setting": true,
+    "Media": true,
+    "Dashboard": true
+}

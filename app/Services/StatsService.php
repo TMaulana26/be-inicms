@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Media;
-use App\Models\User;
-use App\Models\Role;
-use App\Models\Permission;
+use Modules\Media\Models\Media;
+use Modules\Acl\Models\User;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Models\Permission;
 
 class StatsService
 {

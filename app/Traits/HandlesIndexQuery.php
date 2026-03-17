@@ -35,7 +35,7 @@ trait HandlesIndexQuery
 
         // Handle Search
         if (!empty($params['search']) && !empty($searchColumns)) {
-            $query->where(function ($q) use ($params, $searchColumns) {
+            $query->where(function (Builder $q) use ($params, $searchColumns) {
                 foreach ($searchColumns as $column) {
                     $q->orWhere($column, 'like', "%{$params['search']}%");
                 }

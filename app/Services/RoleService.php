@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Role;
+use Modules\Acl\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 use App\Traits\HandlesIndexQuery;

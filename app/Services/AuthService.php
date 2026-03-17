@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use Modules\Acl\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -40,6 +40,7 @@ class AuthService
 
     public function login(array $credentials): array
     {
+        /** @var User $user */
         $user = User::where('email', $credentials['email'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {

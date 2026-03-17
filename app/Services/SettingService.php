@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Setting;
+use Modules\Setting\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 
@@ -51,6 +51,7 @@ class SettingService
             $updatedSettings = collect();
 
             foreach ($settings as $settingData) {
+                /** @var Setting $setting */
                 $setting = Setting::where('key', $settingData['key'])->first();
 
                 if ($setting) {

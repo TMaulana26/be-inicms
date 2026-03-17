@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Permission;
+use Modules\Acl\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
 use App\Traits\HandlesIndexQuery;

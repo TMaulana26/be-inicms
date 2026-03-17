@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use Modules\Acl\Models\User;
 use Illuminate\Http\UploadedFile;
-use App\Models\Media;
+use Modules\Media\Models\Media;
 use Illuminate\Support\Facades\DB;
 
 use App\Traits\HandlesIndexQuery;

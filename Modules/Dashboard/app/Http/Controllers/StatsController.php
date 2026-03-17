@@ -1,0 +1,28 @@
+<?php
+
+namespace Modules\Dashboard\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\StatsResource;
+use App\Services\StatsService;
+use Illuminate\Http\JsonResponse;
+
+class StatsController extends Controller
+{
+    public function __construct(
+        protected StatsService $statsService
+    ) {}
+
+    /**
+     * Display stats of users, roles, and permissions.
+     */
+    public function index(): JsonResponse
+    {
+        $stats = $this->statsService->getDashboardStats();
+
+        return $this->resourceResponse(
+            new StatsResource($stats),
+            'Stats retrieved successfully.'
+        );
+    }
+}

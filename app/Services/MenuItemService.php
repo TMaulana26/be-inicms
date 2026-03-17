@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\MenuItem;
+use Modules\Menu\Models\MenuItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
