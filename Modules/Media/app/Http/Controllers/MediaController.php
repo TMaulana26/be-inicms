@@ -11,7 +11,7 @@ use Modules\Media\Models\Media;
 use Modules\Media\Services\MediaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Resources\MediaResource;
+use Modules\Media\Transformers\MediaResource;
 use App\Traits\HandlesBulkAndSoftDeletes;
 
 class MediaController extends Controller

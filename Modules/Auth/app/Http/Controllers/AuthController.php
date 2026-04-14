@@ -9,7 +9,7 @@ use Modules\Auth\Http\Requests\Auth\RegisterRequest;
 use Modules\Auth\Http\Requests\Auth\ForgotPasswordRequest;
 use Modules\Auth\Http\Requests\Auth\ResetPasswordRequest;
 use Modules\Auth\Services\AuthService;
-use App\Http\Resources\UserResource;
+use Modules\Acl\Transformers\UserResource;
 use Modules\Acl\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

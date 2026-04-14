@@ -3,7 +3,7 @@
 namespace Modules\Menu\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MenuItemResource;
+use Modules\Menu\Transformers\MenuItemResource;
 use Modules\Menu\Http\Requests\MenuItem\IndexMenuItemRequest;
 use Modules\Menu\Http\Requests\MenuItem\StoreMenuItemRequest;
 use Modules\Menu\Http\Requests\MenuItem\UpdateMenuItemRequest;

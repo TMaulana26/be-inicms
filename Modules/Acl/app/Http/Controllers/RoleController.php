@@ -9,7 +9,7 @@ use Modules\Acl\Http\Requests\Role\StoreRoleRequest;
 use Modules\Acl\Http\Requests\Role\UpdateRoleRequest;
 use Modules\Acl\Http\Requests\Role\IndexRoleRequest;
 use Modules\Acl\Http\Requests\Role\AssignPermissionRequest;
-use App\Http\Resources\RoleResource;
+use Modules\Acl\Transformers\RoleResource;
 use Modules\Acl\Services\RoleService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;

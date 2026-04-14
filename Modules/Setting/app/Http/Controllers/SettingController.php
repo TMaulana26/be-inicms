@@ -3,7 +3,7 @@
 namespace Modules\Setting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SettingResource;
+use Modules\Setting\Transformers\SettingResource;
 use Modules\Setting\Http\Requests\Setting\IndexSettingRequest;
 use Modules\Setting\Http\Requests\Setting\UpdateBulkSettingRequest;
 use App\Traits\HandlesBulkAndSoftDeletes;

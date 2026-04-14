@@ -93,7 +93,7 @@ class TwoFactorController extends Controller
         $token = $user->createToken('auth_token', ['*'], $expiresAt)->plainTextToken;
 
         return $this->successResponse([
-            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'permissions')),
+            'user' => new \Modules\Acl\Transformers\UserResource($user->load('roles', 'permissions')),
             'access_token' => $token,
             'token_type' => 'Bearer',
             'expires_at' => $expiresAt->toDateTimeString(),

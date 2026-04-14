@@ -9,7 +9,7 @@ use Modules\Acl\Http\Requests\Permission\StorePermissionRequest;
 use Modules\Acl\Http\Requests\Permission\UpdatePermissionRequest;
 use Modules\Acl\Http\Requests\Permission\IndexPermissionRequest;
 use Modules\Acl\Http\Requests\Permission\AssignRoleRequest;
-use App\Http\Resources\PermissionResource;
+use Modules\Acl\Transformers\PermissionResource;
 use Modules\Acl\Services\PermissionService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;

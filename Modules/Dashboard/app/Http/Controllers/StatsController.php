@@ -3,7 +3,7 @@
 namespace Modules\Dashboard\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StatsResource;
+use Modules\Dashboard\Transformers\StatsResource;
 use Modules\Dashboard\Services\StatsService;
 use Illuminate\Http\JsonResponse;
 
