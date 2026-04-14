@@ -1,47 +1,61 @@
-# Frontend Integration - Settings
+# System Settings Guide
 
-This guide covers application settings management.
+This guide covers the management of application-wide configurations and settings.
 
-## Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/settings` | List settings (paginated). |
-| `GET` | `/settings/grouped` | Get all settings grouped by their `group` (e.g., identity, contact). |
-| `GET` | `/settings/{id}` | Get specific setting. |
-| `POST` | `/settings/bulk` | Update multiple settings at once. |
-| `DELETE` | `/settings/{id}` | Delete setting. |
+> [!NOTE]
+> All settings are managed by the `Setting` module. It supports multiple data types including strings, booleans, and images.
 
 ---
 
-## Grouped Settings (Preferred for UI)
-The `GET /settings/grouped` endpoint is the primary way to fetch settings for a configuration page. It returns a nested object where keys are the group names.
+## 🏗️ Technical Overview
+
+- **Base URL**: `/api/v1`
+- **Prefix**: `/settings`
+- **Logic**: Supports both single-item CRUD and grouped/bulk operations for configuration forms.
 
 ---
 
-## Bulk Update
-Use this to save an entire form of settings.
+## ⚙️ Settings Endpoints
 
-**Endpoint**: `POST /settings/bulk`  
-**Payload**:
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/settings` | List all settings (paginated). | Yes |
+| `GET` | `/settings/grouped` | Get settings nested by their `group` key. | Yes |
+| `GET` | `/settings/{id}` | Get details of a specific setting. | Yes |
+| `POST` | `/settings/bulk` | Update multiple settings in one request. | Yes |
+| `PATCH` | `/settings/{id}/toggle-status` | Toggle active status. | Yes |
+| `DELETE` | `/settings/{id}` | Soft delete a setting. | Yes |
+
+---
+
+## 🛠️ Bulk Management
+
+The `POST /api/v1/settings/bulk` endpoint is the recommended way to save configuration forms.
+
+### Request Payload
 ```json
 {
     "settings": [
-        { "key": "app_name", "value": "My Modified CMS" },
-        { "key": "contact_email", "value": "new@example.com" }
+        { "key": "app_name", "value": "My Modular CMS" },
+        { "key": "maintenance_mode", "value": false }
     ]
 }
 ```
 
+> [!TIP]
+> **Image Uploads**: If a setting is of type `image`, you can send the file in the `value` field using a `multipart/form-data` request. The backend will automatically handle the media conversion and storage.
+
 ---
 
-## Bulk Operations
-Standard bulk endpoints are available:
-- `POST /settings/bulk-destroy`
-- `PATCH /settings/bulk-restore`
-- `PATCH /settings/bulk-toggle-status`
-- `POST /settings/bulk-force-delete`
+## 📦 Maintenance Operations
 
-## Filtering and Searching
-- **Search columns**: `key`, `name`.
-- **Custom Filters**: `group` (e.g., `/api/v1/settings?group=general`).
+Standard maintenance endpoints are available at `/api/v1/settings/`:
+- `POST /bulk-destroy`
+- `PATCH /bulk-restore`
+- `POST /bulk-force-delete`
+
+---
+
+## 📚 Related Guides
+- **[Media Library](./MEDIA_API_GUIDE.md)**: Handling images used in settings.
+- **[Documentation Index](./README.md)**: Return to main menu.

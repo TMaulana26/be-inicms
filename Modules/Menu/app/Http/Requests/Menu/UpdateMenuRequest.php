@@ -23,13 +23,13 @@ class UpdateMenuRequest extends FormRequest
             'slug' => 'sometimes|nullable|string|max:255|unique:menus,slug,' . $menuId,
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
-            'items' => 'nullable|array',
-            'items.*.title' => 'required|string|max:255',
-            'items.*.icon' => 'nullable|string|max:255',
-            'items.*.url' => 'nullable|string',
-            'items.*.target' => 'nullable|string|in:_self,_blank',
-            'items.*.order' => 'nullable|integer',
-            'items.*.children' => 'nullable|array',
+            'children' => 'nullable|array',
+            'children.*.title' => 'required|string|max:255',
+            'children.*.icon' => 'nullable|string|max:255',
+            'children.*.url' => 'nullable|string',
+            'children.*.target' => 'nullable|string|in:_self,_blank',
+            'children.*.order' => 'nullable|integer',
+            'children.*.children' => 'nullable|array',
         ];
     }
 }

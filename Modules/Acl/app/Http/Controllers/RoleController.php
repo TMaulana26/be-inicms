@@ -10,7 +10,7 @@ use Modules\Acl\Http\Requests\Role\UpdateRoleRequest;
 use Modules\Acl\Http\Requests\Role\IndexRoleRequest;
 use Modules\Acl\Http\Requests\Role\AssignPermissionRequest;
 use App\Http\Resources\RoleResource;
-use App\Services\RoleService;
+use Modules\Acl\Services\RoleService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
 
@@ -49,11 +49,11 @@ class RoleController extends Controller
     {
         $roles = $this->roleService->index($request->validated());
 
-        if ($request->get('with_permissions', false)) {
+        if ($request->input('with_permissions', false)) {
             $roles->load('permissions');
         }
 
-        if ($request->get('with_users', false)) {
+        if ($request->input('with_users', false)) {
             $roles->load('users');
         }
 

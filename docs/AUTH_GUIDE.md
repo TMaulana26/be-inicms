@@ -1,107 +1,74 @@
-# Frontend Integration - Authentication & 2FA
+# Authentication & MFA Guide
 
-This guide details the authentication and Two-Factor Authentication (2FA) flows for the INI CMS API.
+This guide details the authentication and Multi-Factor Authentication (MFA/2FA) flows for the INI CMS API.
 
-## Base Configuration
+> [!NOTE]
+> All authentication logic is contained within the `Auth` module. It uses Laravel Sanctum for secure, token-based authentication.
+
+---
+
+## 🏗️ Technical Overview
 
 - **Base URL**: `/api/v1`
-- **Authentication Strategy**: Laravel Sanctum (Stateful for Web, Token-based for Mobile/SPA).
-- **Headers**: 
+- **Strategy**: Bearer Token (Sanctum)
+- **Required Headers**:
     - `Accept: application/json`
-    - `Authorization: Bearer <your_token>`
+    - `Authorization: Bearer {token}`
 
 ---
 
-## 1. Core Authentication
+## 🔐 Core Authentication
 
-### Registration
-**Endpoint**: `POST /login` (Note: Actually `POST /register` based on routes)  
-**Endpoint**: `POST /register`
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/register` | Register a new user account. | No |
+| `POST` | `/login` | Authenticate and retrieve an access token. | No |
+| `POST` | `/logout` | Revoke the current access token. | Yes |
+| `GET` | `/me` | Retrieve the authenticated user's profile. | Yes |
 
-| Field | Type | Description |
-|---|---|---|
-| `name` | string | Full name of the user. |
-| `email` | string | Unique email address. |
-| `password` | string | Minimum 8 characters. |
-| `password_confirmation` | string | Must match password. |
-
-### Login
-**Endpoint**: `POST /login`
-
-| Field | Type | Description |
-|---|---|---|
-| `email` | string | User email. |
-| `password` | string | User password. |
-
-**Response (Success)**:
+### Login Response (Success)
 ```json
 {
     "success": true,
-    "message": "Login successful.",
+    "message": "User logged in successfully.",
     "data": {
-        "token": "1|abc123xyz...",
-        "user": { ... }
-    }
-}
-```
-
-**Response (2FA Required)**:
-If 2FA is enabled, the login will return a temporary token with only the `2fa` ability.
-```json
-{
-    "success": true,
-    "message": "2FA challenge required.",
-    "data": {
-        "token": "2|temp_2fa_token...",
-        "requires_2fa": true
+        "user": { "id": 1, "name": "Admin", ... },
+        "access_token": "1|abc123xyz...",
+        "token_type": "Bearer",
+        "expires_at": "2026-04-14 12:00:00"
     }
 }
 ```
 
 ---
 
-## 2. Two-Factor Authentication (2FA)
+## 🛡️ Two-Factor Authentication (2FA)
 
-### Enable 2FA
-**Endpoint**: `POST /2fa/enable` (Requires auth)  
-Returns the SVG QR code and Secret Key.
+If a user has 2FA enabled, the initial `/login` will return a `requires_2fa: true` flag and a temporary token.
 
-### Confirm 2FA
-**Endpoint**: `POST /2fa/confirm`  
-Validates the code from the authenticator app to finalize activation.
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/2fa/enable` | Generate QR code and secret for 2FA setup. | Yes |
+| `POST` | `/2fa/confirm` | Confirm setup with a code from the app. | Yes |
+| `DELETE` | `/2fa/disable` | Disable 2FA for the account. | Yes |
+| `POST` | `/2fa/challenge` | Complete login using a 2FA or recovery code. | Yes (2FA) |
 
-| Field | Type | Description |
-|---|---|---|
-| `code` | string | 6-digit code from App. |
-
-### Disable 2FA
-**Endpoint**: `DELETE /2fa/disable`  
-Removes 2FA from the account.
-
-### 2FA Challenge (During Login)
-**Endpoint**: `POST /2fa/challenge`  
-Used when login returns `requires_2fa: true`. Use the temporary token in the `Authorization` header.
-
-| Field | Type | Description |
-|---|---|---|
-| `code` | string | 6-digit code from App. |
-
-**Success**: Returns the final access token with full permissions.
+> [!IMPORTANT]
+> The `/2fa/challenge` endpoint requires the temporary token returned during the login phase. Once verified, it returns a full access token.
 
 ---
 
-## 3. Account Management
+## 🔑 Password & Verification
 
-### Get Current User
-**Endpoint**: `GET /me`
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/forgot-password` | Request a password reset link. | No |
+| `POST` | `/reset-password` | Reset password using email token. | No |
+| `POST` | `/email/verify` | Verify email with signed URL. | Yes |
+| `POST` | `/email/verification-notification` | Resend verification email. | Yes |
 
-### Logout
-**Endpoint**: `POST /logout`
+---
 
-### Password Recovery
-- `POST /forgot-password`: Send reset link to email.
-- `POST /reset-password`: Update password using token from email.
-
-### Email Verification
-- `POST /email/verify`: Verify email with signed URL parameters.
-- `POST /email/verification-notification`: Resend verification email.
+## 📚 Related Guides
+- **[User Management](./USER_GUIDE.md)**: Managing user accounts and roles.
+- **[Documentation Index](./README.md)**: Return to main menu.

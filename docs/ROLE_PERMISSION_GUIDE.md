@@ -1,53 +1,65 @@
-# Frontend Integration - Roles & Permissions
+# Roles & Permissions Guide
 
-This guide covers the Role-Based Access Control (RBAC) system.
+This guide covers the Role-Based Access Control (RBAC) system used to secure the application.
 
-## Roles Management
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/roles` | List roles. |
-| `POST` | `/roles` | Create a new role. |
-| `GET` | `/roles/{id}` | Get role details. |
-| `PUT/PATCH` | `/roles/{id}` | Update role. |
-| `DELETE` | `/roles/{id}` | Delete role. |
-| `POST` | `/roles/{id}/sync-permissions` | Sync permissions to role. |
+> [!NOTE]
+> RBAC is managed by the `Acl` module and is built upon the `spatie/laravel-permission` package.
 
 ---
 
-## Permissions Management
+## 🏗️ Technical Overview
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/permissions` | List permissions. |
-| `POST` | `/permissions` | Create a permission. |
-| `GET` | `/permissions/{id}` | Get details. |
-| `PUT/PATCH` | `/permissions/{id}` | Update. |
-| `DELETE` | `/permissions/{id}` | Delete. |
+- **Base URL**: `/api/v1`
+- **Prefixes**: `/roles` and `/permissions`
+- **Models**: Standardized with `SoftDeletes` and `HasActiveStatus`.
 
 ---
 
-## Syncing Permissions to Roles
+## 🛡️ Roles Management
 
-To specify what a role can do, use the `sync-permissions` endpoint.
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/roles` | List roles. Supports `with_permissions=1`. | Yes |
+| `POST` | `/roles` | Create a new system role. | Yes |
+| `GET` | `/roles/{id}` | Get role details and its permissions. | Yes |
+| `PUT/PATCH` | `/roles/{id}` | Update role name or status. | Yes |
+| `DELETE` | `/roles/{id}` | Soft delete a role. | Yes |
+| `POST` | `/roles/{id}/sync-permissions` | **Replace** all permissions for this role. | Yes |
+| `POST` | `/roles/{id}/give-permissions` | **Add** permissions (additive). | Yes |
+| `POST` | `/roles/{id}/revoke-permissions` | **Remove** specific permissions. | Yes |
 
-**Endpoint**: `POST /roles/{id}/sync-permissions`  
+---
+
+## 🔑 Permissions Management
+
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/permissions` | List all available permissions. | Yes |
+| `POST` | `/permissions` | Create a new permission node. | Yes |
+| `GET` | `/permissions/{id}` | Get permission details. | Yes |
+| `PATCH` | `/permissions/{id}/toggle-status` | Toggle active status. | Yes |
+| `POST` | `/permissions/{id}/sync-roles` | **Replace** roles for this permission. | Yes |
+
+---
+
+## 🔄 Syncing Examples
+
+### Syncing Permissions to a Role
+Use `sync-permissions` to define the total set of what a role can do.
+
+**Endpoint**: `POST /api/v1/roles/{id}/sync-permissions`  
 **Payload**:
 ```json
 {
-    "permissions": ["view_users", "create_users", "delete_users"]
+    "permissions": ["view_users", "create_users"]
 }
 ```
 
+> [!IMPORTANT]
+> The `sync` operation will remove any existing permissions that are not present in the new array. For additive changes, use `give-permissions`.
+
 ---
 
-## Bulk Operations
-Both Roles and Permissions support standard bulk endpoints:
-- `POST .../bulk-destroy`
-- `PATCH .../bulk-restore`
-- `PATCH .../bulk-toggle-status`
-- `POST .../bulk-force-delete`
-
-## Filtering and Searching
-- **Search columns (Roles)**: `name`, `guard_name`.
-- **Search columns (Permissions)**: `name`, `guard_name`.
+## 📚 Related Guides
+- **[User Management](./USER_GUIDE.md)**: Assigning roles to specific users.
+- **[Documentation Index](./README.md)**: Return to main menu.

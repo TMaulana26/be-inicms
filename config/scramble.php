@@ -7,29 +7,17 @@ return [
      * Your API path. By default, all routes starting with this path will be added to the docs.
      * If you need to change this behavior, you can add your custom routes resolver using `Scramble::routes()`.
      */
-    'api_path' => 'api',
-
-    /*
-     * Your API domain. By default, app domain is used. This is also a part of the default API routes
-     * matcher, so when implementing your own, make sure you use this config if needed.
-     */
-    'api_domain' => null,
-
-    /*
-     * The path where your OpenAPI specification will be exported.
-     */
-    'export_path' => 'api.json',
-
-    'info' => [
-        /*
-         * API version.
-         */
-        'version' => env('API_VERSION', '0.0.1'),
-
-        /*
-         * Description rendered on the home page of the API documentation (`/docs/api`).
-         */
-        'description' => '',
+    'configs' => [
+        'v1' => [
+            'routes' => [
+                'prefix' => 'api/v1',
+            ],
+            'export_path' => 'api-v1.json',
+            'info' => [
+                'version' => env('API_VERSION', '1.0.0'),
+                'description' => 'Documentation for API Version 1.',
+            ],
+        ],
     ],
 
     /*

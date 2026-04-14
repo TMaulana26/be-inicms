@@ -1,100 +1,82 @@
-# Media API Documentation
+# Media Library Guide
 
-This guide outlines the available endpoints for managing media in the application. All routes are prefixed with `/api`.
+This guide outlines the endpoints for managing media in the application, including file uploads, conversions, and bulk management.
 
-## Endpoints
-
-### Single Resource Operations
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/media` | List all media (supports pagination, search, and status filtering). |
-| `POST` | `/media` | Upload a new media file. |
-| `GET` | `/media/{id}` | Retrieve details of a specific media item. |
-| `PATCH` | `/media/{id}` | Update media metadata (name, status). |
-| `DELETE` | `/media/{id}` | Soft delete a media item. |
-| `PATCH` | `/media/{id}/toggle-status` | Toggle the `is_active` status. |
-| `POST` | `/media/{id}/restore` | Restore a soft-deleted media item. |
-| `DELETE` | `/media/{id}/force` | Permanently delete a media item. |
-
-### Bulk Operations
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/media/bulk-destroy` | Soft delete multiple media items. |
-| `PATCH` | `/media/bulk-restore` | Restore multiple soft-deleted media items. |
-| `PATCH` | `/media/bulk-toggle-status` | Toggle status for multiple media items. |
-| `POST` | `/media/bulk-force-delete` | Permanently delete multiple media items. |
+> [!NOTE]
+> All media operations are handled by the `Media` module. It integrates with `spatie/laravel-medialibrary` to handle file processing and conversions (like WebP optimization).
 
 ---
 
-## Query Parameters
+## 🏗️ Technical Overview
 
-The `/media` listing endpoint supports the following parameters:
-
-- `search`: Searches in `name` and `file_name` columns.
-- `status`: Filter by `active` or `inactive`.
-- `trashed`: Filter by `only` or `with` (for soft-deleted items).
-- `per_page`: Number of items per page. Set to `-1` to return all records.
-- `sort_by`: Column to sort by (default: `id`).
-- `sort_order`: `asc` or `desc` (default: `desc`).
+- **Base URL**: `/api/v1`
+- **Prefix**: `/media`
+- **Supported Formats**: Images (PNG, JPG, WebP), Documents (PDF, DOCX), etc.
 
 ---
 
-## Request Examples
+## 🖼️ Media Endpoints
 
-### 1. Upload Media
-**Endpoint**: `POST /media`  
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/media` | List all media with filtering and search. | Yes |
+| `POST` | `/media` | Upload a new media file. | Yes |
+| `GET` | `/media/{id}` | Retrieve details of a specific media item. | Yes |
+| `PATCH` | `/media/{id}` | Update metadata (title, status). | Yes |
+| `DELETE` | `/media/{id}` | Soft delete a media item. | Yes |
+| `PATCH` | `/media/{id}/restore` | Restore a soft-deleted item. | Yes |
+| `PATCH` | `/media/{id}/toggle-status` | Toggle the `is_active` status. | Yes |
+| `DELETE` | `/media/{id}/force` | Permanently delete the file and record. | Yes |
+
+---
+
+## 📤 Upload Examples
+
+### 1. Simple Upload
+**Endpoint**: `POST /api/v1/media`  
 **Content-Type**: `multipart/form-data`
 
 | Field | Type | Description |
-|---|---|---|
-| `file` | file | The file to upload. |
-| `collection` | string | (Optional) The collection name (default: `default`). |
+| :--- | :--- | :--- |
+| `file` | file | The actual file to upload. |
+| `collection` | string | (Optional) Destination collection (default: `default`). |
+| `name`| string | (Optional) Internal name for the file. |
 
-### 2. Update Media
-**Endpoint**: `PATCH /media/{id}`  
-**Body**:
-```json
-{
-    "name": "new_file_name",
-    "is_active": true
-}
-```
-
-### 3. List Media (with Filters)
-**Endpoint**: `GET /media?search=report&status=active&per_page=15`
-
-### 4. Bulk Status Toggle
-**Endpoint**: `PATCH /media/bulk/toggle-status`  
-**Body**:
-```json
-{
-    "ids": [1, 2, 3]
-}
-```
-
----
-
-## Response Structure (MediaResource)
-
-All endpoints return a standardized success response.
-
+### 2. Standard Response
 ```json
 {
     "success": true,
     "message": "Media retrieved successfully.",
     "data": {
         "id": 1,
-        "file_name": "example.png",
+        "file_name": "example.webp",
         "name": "example",
-        "mime_type": "image/png",
+        "mime_type": "image/webp",
         "size": 1024,
-        "collection_name": "default",
-        "url": "http://localhost/storage/1/example.png",
-        "thumbnail_url": "http://localhost/storage/1/conversions/example-thumbnail.png",
-        "is_active": true,
-        "created_at": "2026-03-04T14:41:24.000000Z"
+        "url": "http://localhost/storage/1/example.webp",
+        "thumbnail_url": "http://localhost/storage/1/conversions/example-thumbnail.webp",
+        "preview_url": "http://localhost/storage/1/conversions/example-preview.webp",
+        "is_active": true
     }
 }
 ```
+
+---
+
+## 📦 Bulk Operations
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/media/bulk-destroy` | Soft delete multiple items. |
+| `PATCH` | `/media/bulk-restore` | Restore multiple deleted items. |
+| `PATCH` | `/media/bulk-toggle-status` | Toggle status for multiple items. |
+| `POST` | `/media/bulk-force-delete` | Permanent bulk deletion. |
+
+> [!TIP]
+> Bulk operations require an array of `ids` in the request body.
+
+---
+
+## 📚 Related Guides
+- **[System Settings](./SETTING_GUIDE.md)**: Configuring media storage paths.
+- **[Documentation Index](./README.md)**: Return to main menu.

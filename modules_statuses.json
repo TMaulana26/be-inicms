@@ -5,5 +5,7 @@
     "Menu": true,
     "Setting": true,
     "Media": true,
-    "Dashboard": true
+    "Dashboard": true,
+    "Blog": true,
+    "Page": true
 }

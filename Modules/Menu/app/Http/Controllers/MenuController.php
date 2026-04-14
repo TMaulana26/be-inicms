@@ -8,9 +8,8 @@ use Modules\Menu\Http\Requests\Menu\IndexMenuRequest;
 use Modules\Menu\Http\Requests\Menu\StoreMenuRequest;
 use Modules\Menu\Http\Requests\Menu\UpdateMenuRequest;
 use App\Traits\HandlesBulkAndSoftDeletes;
-use App\Services\MenuService;
+use Modules\Menu\Services\MenuService;
 use Modules\Menu\Models\Menu;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class MenuController extends Controller
@@ -24,7 +23,7 @@ class MenuController extends Controller
     protected function getService() { return $this->menuService; }
     protected function getResourceClass(): string { return MenuResource::class; }
     protected function getModelName(): string { return 'menu'; }
-    protected function getEagerLoadRelations(): array { return ['items.children']; }
+    protected function getEagerLoadRelations(): array { return ['children']; }
 
     /**
      * Display a listing of the resource.
@@ -59,7 +58,7 @@ class MenuController extends Controller
     public function show(Menu $menu): JsonResponse
     {
         return $this->resourceResponse(
-            new MenuResource($menu->load('items.children')),
+            new MenuResource($menu->load('children')),
             'Menu retrieved successfully.'
         );
     }

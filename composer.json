@@ -39,6 +39,8 @@
             "Modules\\Setting\\": "Modules/Setting/app/",
             "Modules\\Media\\": "Modules/Media/app/",
             "Modules\\Dashboard\\": "Modules/Dashboard/app/",
+            "Modules\\Blog\\": "Modules/Blog/app/",
+            "Modules\\Page\\": "Modules/Page/app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

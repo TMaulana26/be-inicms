@@ -2,6 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'v1'], function () {
-    require __DIR__ . '/settings.php';
-});
+require __DIR__ . '/settings.php';

@@ -1,31 +1,44 @@
-# Frontend Integration - User Management
+# User Management Guide
 
-This guide covers managing users through the API.
+This guide covers the management of system users, including account creation, status toggling, and role assignments.
 
-## Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/users` | List users (supports search, filters, pagination). |
-| `POST` | `/users` | Create a new user. |
-| `GET` | `/users/{id}` | Get user details. |
-| `PUT/PATCH` | `/users/{id}` | Update user information. |
-| `DELETE` | `/users/{id}` | Soft delete a user. |
-| `PATCH` | `/users/{id}/toggle-status` | Toggle user activity status. |
-| `PATCH` | `/users/{id}/restore` | Restore a soft-deleted user. |
-| `DELETE` | `/users/{id}/force-delete` | Permanently delete a user. |
+> [!NOTE]
+> User management is part of the `Acl` (Access Control List) module. It handles both core user data and integration with the RBAC system.
 
 ---
 
-## Role Assignment
+## 🏗️ Technical Overview
 
-You can manage user roles through dedicated endpoints:
+- **Base URL**: `/api/v1`
+- **Prefix**: `/users`
+- **Security**: All endpoints except basic registration require administrative authentication.
 
-- `POST /users/{id}/sync-roles`: Replaces all current roles with the provided list.
-- `POST /users/{id}/assign-roles`: Adds roles to the user without removing existing ones.
-- `POST /users/{id}/remove-roles`: Removes specific roles.
+---
 
-**Request Body Example**:
+## 👥 User Endpoints
+
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/users` | List users with search and role filtering. | Yes |
+| `POST` | `/users` | Create a new administrative or system user. | Yes |
+| `GET` | `/users/{id}` | Get full user profile, roles, and permissions. | Yes |
+| `PUT/PATCH` | `/users/{id}` | Update account details (name, email, password). | Yes |
+| `PATCH` | `/users/{id}/toggle-status`| Toggle `is_active` status. | Yes |
+| `PATCH` | `/users/{id}/restore` | Restore a soft-deleted user. | Yes |
+| `DELETE` | `/users/{id}` | Soft delete a user account. | Yes |
+| `DELETE` | `/users/{id}/force-delete` | Permanent account deletion. | Yes |
+
+---
+
+## 🎭 Role Assignment
+
+Users can be assigned multiple roles (e.g., "Editor", "Admin") through these dedicated endpoints:
+
+- **Sync Roles**: `POST /api/v1/users/{id}/sync-roles` (Replaces all current roles)
+- **Assign Roles**: `POST /api/v1/users/{id}/assign-roles` (Additive)
+- **Remove Roles**: `POST /api/v1/users/{id}/remove-roles` (Subtractive)
+
+### Payload Example
 ```json
 {
     "roles": ["admin", "editor"]
@@ -34,26 +47,18 @@ You can manage user roles through dedicated endpoints:
 
 ---
 
-## Bulk Operations
-
-Perform actions on multiple users at once.
+## 📦 Bulk Operations
 
 | Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/users/bulk-destroy` | Bulk soft-delete. |
-| `PATCH` | `/users/bulk-restore` | Bulk restore. |
+| :--- | :--- | :--- |
+| `POST` | `/users/bulk-destroy` | Bulk soft-delete accounts. |
+| `PATCH` | `/users/bulk-restore` | Bulk restore accounts. |
 | `PATCH` | `/users/bulk-toggle-status` | Bulk status toggle. |
-| `POST` | `/users/bulk-force-delete` | Bulk permanent delete. |
-
-**Payload**:
-```json
-{
-    "ids": [10, 11, 12]
-}
-```
+| `POST` | `/users/bulk-force-delete` | Permanent bulk deletion. |
 
 ---
 
-## Filtering and Searching
-Refer to the [Index Query Guide](./INDEX_QUERY_GUIDE.md) for standard parameters like `search`, `status`, `trashed`, and `per_page`.
-- **Search columns**: `name`, `email`.
+## 📚 Related Guides
+- **[Roles & Permissions](./ROLE_PERMISSION_GUIDE.md)**: Defining what roles are available.
+- **[Authentication & 2FA](./AUTH_GUIDE.md)**: Login and registration flows.
+- **[Documentation Index](./README.md)**: Return to main menu.

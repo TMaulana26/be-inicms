@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Services\MenuService;
+use Modules\Menu\Services\MenuService;
 use Modules\Menu\Models\Menu;
 use Illuminate\Database\Seeder;
 
@@ -17,62 +17,114 @@ class MenuSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
-            'name' => 'Main Navigation',
-            'slug' => 'main-navigation',
-            'description' => 'The primary navigation for the website sidebar.',
-            'items' => [
-                [
-                    'title' => 'Home',
-                    'icon' => 'Home',
-                    'url' => '/home',
-                    'order' => 0,
-                ],
-                [
-                    'title' => 'Users',
-                    'icon' => 'Users',
-                    'url' => '/users',
-                    'order' => 1,
-                ],
-                [
-                    'title' => 'Roles',
-                    'icon' => 'ShieldCheck',
-                    'url' => '/roles',
-                    'order' => 2,
-                ],
-                [
-                    'title' => 'Permissions',
-                    'icon' => 'Key',
-                    'url' => '/permissions',
-                    'order' => 3,
-                ],
-                [
-                    'title' => 'Media Library',
-                    'icon' => 'ImageIcon',
-                    'url' => '/media',
-                    'order' => 4,
-                ],
-                [
-                    'title' => 'Settings',
-                    'icon' => 'Settings',
-                    'url' => '/settings',
-                    'order' => 5,
-                ],
-                [
-                    'title' => 'My Profile',
-                    'icon' => 'User',
-                    'url' => '/profile',
-                    'order' => 6,
-                ],
+        // Clean up old "Main Navigation" if it exists
+        Menu::where('slug', 'main-navigation')->withTrashed()->forceDelete();
+
+        $menus = [
+            [
+                'title' => 'Home',
+                'icon' => 'Home',
+                'url' => '/home',
+                'order' => 0,
+            ],
+            [
+                'title' => 'Users',
+                'icon' => 'Users',
+                'url' => '/users',
+                'order' => 1,
+                'children' => [
+                    [
+                        'title' => 'User Details',
+                        'icon' => 'User',
+                        'url' => '/users/:id',
+                        'order' => 0,
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Roles',
+                'icon' => 'ShieldCheck',
+                'url' => '/roles',
+                'order' => 2,
+                'children' => [
+                    [
+                        'title' => 'Role Details',
+                        'icon' => 'ShieldCheck',
+                        'url' => '/roles/:id',
+                        'order' => 0,
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Permissions',
+                'icon' => 'Key',
+                'url' => '/permissions',
+                'order' => 3,
+                'children' => [
+                    [
+                        'title' => 'Permission Details',
+                        'icon' => 'Key',
+                        'url' => '/permissions/:id',
+                        'order' => 0,
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Media Library',
+                'icon' => 'ImageIcon',
+                'url' => '/media',
+                'order' => 4,
+            ],
+            [
+                'title' => 'Menus',
+                'icon' => 'LayoutList',
+                'url' => '/menus',
+                'order' => 5,
+                'children' => [
+                    [
+                        'title' => 'Menu Management',
+                        'url' => '/menus',
+                        'order' => 0,
+                    ],
+                    [
+                        'title' => 'Menu Details',
+                        'icon' => 'Menu',
+                        'url' => '/menus/:id',
+                        'order' => 1,
+                    ],
+                    [
+                        'title' => 'Menu Items',
+                        'icon' => 'LayoutList',
+                        'url' => '/menus/items',
+                        'order' => 2,
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Settings',
+                'icon' => 'Settings',
+                'url' => '/settings',
+                'order' => 6,
+            ],
+            [
+                'title' => 'My Profile',
+                'icon' => 'User',
+                'url' => '/profile',
+                'order' => 7,
             ],
         ];
 
-        $menu = Menu::where('slug', $data['slug'])->first();
-
-        if ($menu) {
-            $this->menuService->update($menu, $data);
-        } else {
-            $this->menuService->store($data);
+        foreach ($menus as $menuData) {
+            // Match root menus by title
+            $menu = Menu::where('title', $menuData['title'])->whereNull('parent_id')->first();
+            
+            if ($menu) {
+                // Update existing root menu
+                $this->menuService->update($menu, $menuData);
+            } else {
+                // Store new root menu
+                $this->menuService->store($menuData);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ use Modules\Menu\Http\Requests\MenuItem\IndexMenuItemRequest;
 use Modules\Menu\Http\Requests\MenuItem\StoreMenuItemRequest;
 use Modules\Menu\Http\Requests\MenuItem\UpdateMenuItemRequest;
 use App\Traits\HandlesBulkAndSoftDeletes;
-use App\Services\MenuItemService;
+use Modules\Menu\Services\MenuItemService;
 use Modules\Menu\Models\MenuItem;
 use Illuminate\Http\JsonResponse;
 

@@ -16,13 +16,19 @@ class MenuResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'parent_id' => $this->parent_id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'title' => $this->title,
+            'icon' => $this->icon,
             'description' => $this->description,
-            'items' => MenuItemResource::collection($this->whenLoaded('items')),
+            'url' => $this->url,
+            'target' => $this->target,
+            'order' => $this->order,
+            'is_active' => $this->is_active,
+            'children' => MenuResource::collection($this->whenLoaded('children')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'is_active' => $this->is_active,
         ];
     }
 }

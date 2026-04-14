@@ -4,7 +4,7 @@ namespace Modules\Dashboard\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StatsResource;
-use App\Services\StatsService;
+use Modules\Dashboard\Services\StatsService;
 use Illuminate\Http\JsonResponse;
 
 class StatsController extends Controller

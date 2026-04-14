@@ -10,7 +10,7 @@ use Modules\Acl\Http\Requests\User\UpdateUserRequest;
 use Modules\Acl\Http\Requests\User\IndexUserRequest;
 use Modules\Acl\Http\Requests\User\AssignRoleRequest;
 use App\Http\Resources\UserResource;
-use App\Services\UserService;
+use Modules\Acl\Services\UserService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
 

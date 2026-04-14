@@ -1,33 +1,53 @@
-# Frontend Integration - Stats
+# Dashboard Stats Guide
 
-This guide covers the dashboard statistics endpoint.
+This guide covers the system-wide reporting and statistics endpoint used for the admin dashboard.
 
-## Endpoint
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/stats` | Returns a summary of record counts across the system. |
+> [!NOTE]
+> Stats are aggregated by the `Dashboard` module, which pulls real-time counts from various system modules (Acl, Media, etc.).
 
 ---
 
-## Response Structure
+## 🏗️ Technical Overview
 
-**Endpoint**: `GET /stats`  
-**Response**:
+- **Base URL**: `/api/v1`
+- **Prefix**: `/stats`
+- **Auth**: Requires a valid user session (Sanctum).
+
+---
+
+## 📊 Stats Endpoint
+
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/stats` | Returns nested record counts (active, inactive, deleted). | Yes |
+
+### Response Structure
+The endpoint returns a detailed breakdown of entity states to enable fine-grained dashboard reporting.
+
 ```json
 {
     "success": true,
     "message": "Stats retrieved successfully.",
     "data": {
-        "users": 11,
-        "roles": 4,
-        "permissions": 11,
-        "menus": 1,
-        "menu_items": 7,
-        "media": 0,
-        "settings": 6
+        "users": {
+            "all": 11,
+            "active": 10,
+            "inactive": 1,
+            "deleted": 0
+        },
+        "roles": { ... },
+        "permissions": { ... },
+        "media": { ... }
     }
 }
 ```
 
-This endpoint is typically used to populate summary cards on the admin dashboard.
+> [!IMPORTANT]
+> The counts refer to records within the specific module's scope. For example, `deleted` counts specifically refer to items currently in the "Trash" (Soft Deleted).
+
+---
+
+## 📚 Related Guides
+- **[User Management](./USER_GUIDE.md)**: Details on user activity states.
+- **[Media Library](./MEDIA_API_GUIDE.md)**: Details on file statistics.
+- **[Documentation Index](./README.md)**: Return to main menu.

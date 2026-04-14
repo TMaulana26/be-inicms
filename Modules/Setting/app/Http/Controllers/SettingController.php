@@ -7,7 +7,7 @@ use App\Http\Resources\SettingResource;
 use Modules\Setting\Http\Requests\Setting\IndexSettingRequest;
 use Modules\Setting\Http\Requests\Setting\UpdateBulkSettingRequest;
 use App\Traits\HandlesBulkAndSoftDeletes;
-use App\Services\SettingService;
+use Modules\Setting\Services\SettingService;
 use Modules\Setting\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;

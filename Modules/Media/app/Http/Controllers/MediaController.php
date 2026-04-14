@@ -8,7 +8,7 @@ use Modules\Media\Http\Requests\Media\IndexMediaRequest;
 use Modules\Media\Http\Requests\Media\StoreMediaRequest;
 use Modules\Media\Http\Requests\Media\UpdateMediaRequest;
 use Modules\Media\Models\Media;
-use App\Services\MediaService;
+use Modules\Media\Services\MediaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\MediaResource;

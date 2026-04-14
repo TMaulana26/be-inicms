@@ -4,6 +4,7 @@ namespace Modules\Menu\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasActiveStatus;
 
@@ -12,14 +13,21 @@ class Menu extends Model
     use SoftDeletes, HasActiveStatus;
 
     protected $fillable = [
+        'parent_id',
         'name',
         'slug',
+        'title',
+        'icon',
         'description',
+        'url',
+        'target',
+        'order',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'order' => 'integer',
     ];
 
     /**
@@ -33,18 +41,26 @@ class Menu extends Model
     }
 
     /**
-     * Get the items for the menu.
+     * Get the parent menu/item.
      */
-    public function items(): HasMany
+    public function parent(): BelongsTo
     {
-        return $this->hasMany(MenuItem::class)->whereNull('parent_id')->orderBy('order');
+        return $this->belongsTo(Menu::class, 'parent_id');
     }
 
     /**
-     * Get all items including children.
+     * Get the child menu items.
      */
-    public function allItems(): HasMany
+    public function children(): HasMany
     {
-        return $this->hasMany(MenuItem::class)->orderBy('order');
+        return $this->hasMany(Menu::class, 'parent_id')->orderBy('order');
+    }
+
+    /**
+     * Scope a query to only include root menus.
+     */
+    public function scopeRoots($query)
+    {
+        return $query->whereNull('parent_id');
     }
 }
