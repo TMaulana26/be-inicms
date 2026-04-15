@@ -16,11 +16,15 @@ class Category extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'type',
         'name',
         'slug',
         'description',
         'is_active',
     ];
+
+    public const TYPE_POST = 'post';
+    public const TYPE_MEDIA = 'media';
 
     /**
      * Get the posts for the category.

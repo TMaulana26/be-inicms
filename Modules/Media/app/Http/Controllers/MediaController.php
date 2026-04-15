@@ -62,7 +62,8 @@ class MediaController extends Controller
             $user,
             $request->file('file'),
             $request->input('collection', 'default'),
-            $request->input('name')
+            $request->input('name'),
+            $request->input('category_id')
         );
 
         return $this->resourceResponse(

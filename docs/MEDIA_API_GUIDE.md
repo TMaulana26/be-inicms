@@ -36,11 +36,10 @@ This guide outlines the endpoints for managing media in the application, includi
 **Endpoint**: `POST /api/v1/media`  
 **Content-Type**: `multipart/form-data`
 
-| Field | Type | Description |
-| :--- | :--- | :--- |
 | `file` | file | The actual file to upload. |
 | `collection` | string | (Optional) Destination collection (default: `default`). |
 | `name`| string | (Optional) Internal name for the file. |
+| `category_id` | integer | (Optional) ID of the media category. |
 
 ### 2. Standard Response
 ```json
@@ -56,10 +55,29 @@ This guide outlines the endpoints for managing media in the application, includi
         "url": "http://localhost/storage/1/example.webp",
         "thumbnail_url": "http://localhost/storage/1/conversions/example-thumbnail.webp",
         "preview_url": "http://localhost/storage/1/conversions/example-preview.webp",
-        "is_active": true
+        "is_active": true,
+        "category_id": 5,
+        "category": {
+            "id": 5,
+            "name": "Nature",
+            "slug": "nature",
+            "type": "media"
+        }
     }
 }
 ```
+
+---
+
+## 🔍 Filtering & Search
+
+The `/media` listing endpoint supports several filters:
+
+- **`search`**: Search by file name or internal name.
+- **`category_id`**: Filter by media category.
+- **`only_profile_picture`**: Boolean to filter for user avatars.
+- **`status`**: `active` or `inactive`.
+- **`trashed`**: `only` or `with` for soft-deleted items.
 
 ---
 

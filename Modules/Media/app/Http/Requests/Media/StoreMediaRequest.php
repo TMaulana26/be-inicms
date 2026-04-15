@@ -32,6 +32,7 @@ class StoreMediaRequest extends FormRequest
             ],
             'name' => ['nullable', 'string', 'max:255'],
             'collection' => ['nullable', 'string', 'max:50'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
         ];
     }
 

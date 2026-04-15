@@ -39,6 +39,7 @@ class IndexMediaRequest extends FormRequest
             'search' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive',
             'only_profile_picture' => 'nullable|boolean',
+            'category_id' => 'nullable|integer|exists:categories,id',
         ];
     }
 }

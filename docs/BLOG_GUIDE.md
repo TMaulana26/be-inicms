@@ -17,14 +17,17 @@ The **Blog** module provides a full-featured content management system for manag
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/v1/categories` | List all categories (filtered/paginated) |
-| POST | `/api/v1/categories` | Create a new category |
+| GET | `/api/v1/categories` | List all categories. Supports `type` filter (defaults to `post`). |
+| POST | `/api/v1/categories` | Create a new category. Specify `type` (`post` or `media`). |
 | GET | `/api/v1/categories/{id}` | Show category details |
 | PUT | `/api/v1/categories/{id}` | Update category |
 | DELETE | `/api/v1/categories/{id}` | Soft delete category |
 | PATCH | `/api/v1/categories/{id}/toggle-status` | Toggle active status |
 | POST | `/api/v1/categories/{id}/restore` | Restore soft-deleted category |
 | DELETE | `/api/v1/categories/{id}/force` | Permanent deletion |
+
+> [!NOTE]
+> The Category system is shared across modules. Use the `type` parameter (`post` for Blog, `media` for Media Library) to scope your taxonomies.
 
 ### Posts
 

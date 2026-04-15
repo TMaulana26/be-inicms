@@ -46,6 +46,8 @@ Frontend developers can use these parameters on any endpoint implementing this t
 | :--- | :--- | :--- |
 | `search` | string | Full-text search across the columns specified in the Service. |
 | `status` | string | Filter by `active` or `inactive`. |
+| `type` | string | (Categories) Filter by taxonomy type (`post` or `media`). |
+| `category_id` | integer | (Posts/Media) Filter records by their associated category. |
 | `trashed` | string | Use `only` for deleted items, or `with` to include both. |
 | `per_page` | integer | Number of records. Use `-1` to disable pagination. |
 | `sort_by` | string | The column name to sort by (default: `id`). |

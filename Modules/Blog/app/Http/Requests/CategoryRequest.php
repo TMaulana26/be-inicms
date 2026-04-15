@@ -23,11 +23,14 @@ class CategoryRequest extends FormRequest
         $id = is_object($category) ? $category->id : $category;
 
         return [
+            'type' => ['nullable', 'string', 'in:post,media'],
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                $id ? 'unique:categories,name,' . $id : 'unique:categories,name',
+                $id 
+                    ? 'unique:categories,name,' . $id . ',id,type,' . ($this->type ?? 'post')
+                    : 'unique:categories,name,NULL,id,type,' . ($this->type ?? 'post'),
             ],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],

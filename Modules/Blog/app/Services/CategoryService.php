@@ -32,7 +32,8 @@ class CategoryService
         return $this->handleIndexQuery(
             $query,
             $params,
-            ['name', 'slug', 'description']
+            ['name', 'slug', 'description'],
+            fn($q) => $q->where('type', $params['type'] ?? 'post')
         );
     }
 
@@ -41,7 +42,9 @@ class CategoryService
      */
     public function createCategory(array $data)
     {
-        $data['slug'] = $this->generateUniqueSlug($data['name']);
+        $type = $data['type'] ?? 'post';
+        $data['slug'] = $this->generateUniqueSlug($data['name'], null, $type);
+        $data['type'] = $type;
 
         return Category::create($data);
     }
@@ -52,7 +55,8 @@ class CategoryService
     public function updateCategory(Category $category, array $data)
     {
         if (isset($data['name']) && $data['name'] !== $category->name) {
-            $data['slug'] = $this->generateUniqueSlug($data['name'], $category->id);
+            $type = $data['type'] ?? $category->type;
+            $data['slug'] = $this->generateUniqueSlug($data['name'], $category->id, $type);
         }
 
         $category->update($data);
@@ -157,13 +161,16 @@ class CategoryService
     /**
      * Generate a unique slug for the category.
      */
-    protected function generateUniqueSlug(string $name, $ignoreId = null): string
+    protected function generateUniqueSlug(string $name, $ignoreId = null, string $type = 'post'): string
     {
         $slug = Str::slug($name);
         $originalSlug = $slug;
         $count = 1;
 
-        while (Category::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+        while (Category::where('slug', $slug)
+            ->where('type', $type)
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->exists()) {
             $slug = $originalSlug . '-' . $count++;
         }
 

@@ -16,7 +16,7 @@ If you are a new developer on the project, please start with the **API Developme
 Documentation for the foundational security and system modules.
 
 - **[Authentication & 2FA](./AUTH_GUIDE.md)**: Login, registration, and Two-Factor Authentication flows.
-- [Blog Module Guide](./BLOG_GUIDE.md) — Manage categories, posts, and media.
+- [Blog Module Guide](./BLOG_GUIDE.md) — Manage categories (Blog & Media), posts, and common taxonomies.
 - [Page Module Guide](./PAGE_GUIDE.md) — Manage static content and pages.
 - [Settings Guide](./SETTING_GUIDE.md) — Global project settings management.
 - **[Roles & Permissions](./ROLE_PERMISSION_GUIDE.md)**: RBAC system management (Spatie Permissions).

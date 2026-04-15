@@ -39,7 +39,11 @@ Services handle business logic. Use the custom modular generator:
 php artisan module:make-service <ServiceName> <ModuleName>
 ```
 
-### 4. Controller & Trait Integration
+### 4. Transformers (API Resources)
+Always place API Resources in the `app/Transformers` directory of your module.
+- **Path**: `Modules/<ModuleName>/app/Transformers/<ModelName>Resource.php`
+
+### 5. Controller & Trait Integration
 Controllers should extend the base `Controller` and use the bulk trait:
 
 ```php
@@ -51,6 +55,8 @@ use App\Traits\HandlesBulkAndSoftDeletes;
 class <ModelName>Controller extends Controller
 {
     use HandlesBulkAndSoftDeletes;
+    
+    protected function getResourceClass(): string { return <ModelName>Resource::class; }
     // ...
 }
 ```
@@ -63,19 +69,22 @@ We use **Dedoc/Scramble** for automated OpenAPI generation. To ensure perfect do
 
 1.  **Explicit Methods**: Always define `index`, `store`, `show`, `update`, and `destroy` explicitly.
 2.  **Type-hinting**: Always type-hint specific `FormRequest` classes in your method signatures.
-3.  **Resources**: Always return an API Resource (e.g., `UserResource`) rather than a raw model.
+3.  **Resources**: Always return an API Resource from the module's `Transformers` directory.
 
 ---
 
 ## 🔗 Route Registration
 
-Route registration must follow this specific order to avoid parameter collisions:
+Route registration must follow this specific order to avoid parameter collisions. Always place bulk routes **before** individual model wildcards.
 
 ```php
 Route::prefix('<resource>')->group(function () {
-    // 1. Bulk & Custom Routes (Priority)
-    Route::post('/bulk-destroy', [Controller::class, 'bulkDestroy']);
-    Route::patch('/bulk-restore', [Controller::class, 'bulkRestore']);
+    // 1. Bulk Operations (Priority)
+    Route::prefix('bulk')->group(function () {
+        Route::post('delete', [Controller::class, 'bulkDestroy']);
+        Route::patch('restore', [Controller::class, 'bulkRestore']);
+        Route::patch('toggle-status', [Controller::class, 'bulkToggleStatus']);
+    });
 
     // 2. Special Single-Item Routes
     Route::patch('/{id}/restore', [Controller::class, 'restore']);
@@ -84,6 +93,14 @@ Route::prefix('<resource>')->group(function () {
     Route::apiResource('/', Controller::class);
 });
 ```
+
+---
+
+## 📂 Core 'app' Directory Rules
+
+The root `app/` directory is reserved for **globally shared code only**. 
+- **Allowed**: Base Controllers, Shared Traits, Common Notifications (e.g., system-wide alerts), and Core Providers.
+- **Prohibited**: Module-specific Models, Resources, or Actions (e.g., Fortify actions belong in the `Auth` module).
 
 ---
 

@@ -24,6 +24,7 @@ class UpdateMediaRequest extends FormRequest
         return [
             'name' => 'sometimes|string|max:255',
             'is_active' => 'sometimes|boolean',
+            'category_id' => 'sometimes|nullable|integer|exists:categories,id',
         ];
     }
 }

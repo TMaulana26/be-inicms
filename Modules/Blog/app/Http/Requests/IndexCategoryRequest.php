@@ -26,6 +26,7 @@ class IndexCategoryRequest extends FormRequest
             'sort_order' => 'nullable|in:asc,desc',
             'search' => 'nullable|string|max:255',
             'is_active' => 'nullable|boolean',
+            'type' => 'nullable|string|in:post,media',
         ];
     }
 }

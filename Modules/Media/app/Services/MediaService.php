@@ -24,7 +24,7 @@ class MediaService
             ['name', 'file_name'],
             fn($q) => $q->when(($params['trashed'] ?? null) !== 'only' && ($params['trashed'] ?? null) !== 'with', function ($subQ) use ($params) {
                 $subQ->where('collection_name', ($params['only_profile_picture'] ?? false) ? '=' : '!=', 'profile_picture');
-            }),
+            })->when($params['category_id'] ?? null, fn($q) => $q->where('category_id', $params['category_id'])),
             24
         );
     }
@@ -33,7 +33,7 @@ class MediaService
      * Upload a file and attach it to a User (acting as the generic uploader/owner).
      * The file is automatically converted to WebP via the User model's media conversions.
      */
-    public function upload(User $user, UploadedFile $file, string $collection = 'default', ?string $name = null): Media
+    public function upload(User $user, UploadedFile $file, string $collection = 'default', ?string $name = null, ?int $categoryId = null): Media
     {
         $media = $user->addMedia($file);
 
@@ -41,7 +41,17 @@ class MediaService
             $media->usingName($name);
         }
 
+        if ($categoryId) {
+            $media->withCustomProperties(['category_id' => $categoryId]);
+        }
+
         $media = $media->toMediaCollection($collection);
+
+        // Since Spatie might not map custom properties to top-level columns automatically if not configured,
+        // we manually update the column if we added it to the table.
+        if ($categoryId) {
+            $media->update(['category_id' => $categoryId]);
+        }
 
         return $media;
     }

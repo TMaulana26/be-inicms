@@ -25,6 +25,8 @@ class MediaResource extends JsonResource
             'thumbnail_url' => $this->hasGeneratedConversion('thumbnail') ? $this->getUrl('thumbnail') : null,
             'preview_url' => $this->hasGeneratedConversion('preview') ? $this->getUrl('preview') : null,
             'is_active' => $this->is_active,
+            'category_id' => $this->category_id,
+            'category' => new \Modules\Blog\Transformers\CategoryResource($this->whenLoaded('category')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
