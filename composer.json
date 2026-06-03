@@ -41,7 +41,11 @@
             "Modules\\Media\\": "Modules/Media/app/",
             "Modules\\Dashboard\\": "Modules/Dashboard/app/",
             "Modules\\Blog\\": "Modules/Blog/app/",
+            "Modules\\Blog\\Database\\Factories\\": "Modules/Blog/database/factories/",
+            "Modules\\Blog\\Database\\Seeders\\": "Modules/Blog/database/seeders/",
             "Modules\\Page\\": "Modules/Page/app/",
+            "Modules\\Page\\Database\\Factories\\": "Modules/Page/database/factories/",
+            "Modules\\Page\\Database\\Seeders\\": "Modules/Page/database/seeders/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
