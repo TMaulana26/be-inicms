@@ -17,18 +17,30 @@ class SettingSeeder extends Seeder
             [
                 'key' => 'site_name',
                 'name' => 'Site Name',
-                'value' => 'INI CMS',
+                'value' => [
+                    'en' => 'INI CMS',
+                    'id' => 'INI CMS'
+                ],
                 'type' => 'string',
                 'group' => 'general',
-                'description' => 'The name of your website.',
+                'description' => [
+                    'en' => 'The name of your website.',
+                    'id' => 'Nama situs web Anda.'
+                ],
             ],
             [
                 'key' => 'site_description',
                 'name' => 'Site Description',
-                'value' => 'A modern headless CMS.',
+                'value' => [
+                    'en' => 'A modern headless CMS.',
+                    'id' => 'CMS headless modern.'
+                ],
                 'type' => 'string',
                 'group' => 'general',
-                'description' => 'A brief description of your website.',
+                'description' => [
+                    'en' => 'A brief description of your website.',
+                    'id' => 'Deskripsi singkat tentang situs web Anda.'
+                ],
             ],
             // Appearance
             [
@@ -37,7 +49,10 @@ class SettingSeeder extends Seeder
                 'value' => null,
                 'type' => 'image',
                 'group' => 'appearance',
-                'description' => 'The logo of your website.',
+                'description' => [
+                    'en' => 'The logo of your website.',
+                    'id' => 'Logo situs web Anda.'
+                ],
             ],
             [
                 'key' => 'primary_color',
@@ -45,7 +60,10 @@ class SettingSeeder extends Seeder
                 'value' => '#007bff',
                 'type' => 'string',
                 'group' => 'appearance',
-                'description' => 'The primary color of your theme.',
+                'description' => [
+                    'en' => 'The primary color of your theme.',
+                    'id' => 'Warna utama tema Anda.'
+                ],
             ],
             // Contact
             [
@@ -54,7 +72,10 @@ class SettingSeeder extends Seeder
                 'value' => 'admin@example.com',
                 'type' => 'string',
                 'group' => 'contact',
-                'description' => 'The email address for contact inquiries.',
+                'description' => [
+                    'en' => 'The email address for contact inquiries.',
+                    'id' => 'Alamat email untuk pertanyaan kontak.'
+                ],
             ],
             // Maintenance
             [
@@ -63,7 +84,10 @@ class SettingSeeder extends Seeder
                 'value' => 'false',
                 'type' => 'boolean',
                 'group' => 'maintenance',
-                'description' => 'Enable or disable maintenance mode.',
+                'description' => [
+                    'en' => 'Enable or disable maintenance mode.',
+                    'id' => 'Aktifkan atau nonaktifkan mode pemeliharaan.'
+                ],
             ],
         ];
 

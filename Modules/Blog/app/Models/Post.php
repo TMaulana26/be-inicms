@@ -10,9 +10,13 @@ use Modules\Blog\Database\Factories\PostFactory;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+use Spatie\Translatable\HasTranslations;
+
 class Post extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, SoftDeletes, InteractsWithMedia, HasTranslations;
+
+    public $translatable = ['title', 'summary', 'content'];
 
     /**
      * The attributes that are mass assignable.

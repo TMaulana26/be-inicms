@@ -24,6 +24,7 @@ class UpdateMenuRequest extends FormRequest
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'children' => 'nullable|array',
+            'children.*.id' => 'nullable|exists:menus,id',
             'children.*.title' => 'required|string|max:255',
             'children.*.icon' => 'nullable|string|max:255',
             'children.*.url' => 'nullable|string',

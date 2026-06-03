@@ -23,6 +23,7 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'summary' => $this->summary,
             'content' => $this->content,
+            'translations' => $this->when($request->boolean('with_translations'), $this->getTranslations()),
             'status' => $this->status,
             'is_featured' => (bool) $this->is_featured,
             'featured_image' => $this->getFirstMediaUrl('featured_image'),

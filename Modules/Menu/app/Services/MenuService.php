@@ -50,7 +50,7 @@ class MenuService
                 $data['name'] = $data['title'];
             }
             if (isset($data['name']) && !isset($data['slug'])) {
-                $data['slug'] = Str::slug($data['name']);
+                $data['slug'] = Str::slug(is_array($data['name']) ? ($data['name']['en'] ?? reset($data['name'])) : $data['name']);
             }
             
             $menu = Menu::create(Arr::except($data, ['children']));
@@ -72,15 +72,14 @@ class MenuService
             if (isset($data['title']) && !isset($data['name'])) {
                 $data['name'] = $data['title'];
             }
+            // Only generate slug if not provided and name is set
             if (isset($data['name']) && !isset($data['slug'])) {
-                $data['slug'] = Str::slug($data['name']);
+                $data['slug'] = Str::slug(is_array($data['name']) ? ($data['name']['en'] ?? reset($data['name'])) : $data['name']);
             }
 
             $menu->update(Arr::except($data, ['children']));
 
             if (isset($data['children'])) {
-                // Delete existing children and rebuild
-                $menu->children()->delete();
                 $this->syncChildren($menu, $data['children']);
             }
 
@@ -128,19 +127,44 @@ class MenuService
 
     /**
      * Synchronize children recursively.
+     * Performs an "upsert" for children and deletes those not present in the payload.
      */
     protected function syncChildren(Menu $parent, array $children): void
     {
+        $processedIds = [];
+
         foreach ($children as $index => $childData) {
-            $child = Menu::create(array_merge($childData, [
+            $childId = $childData['id'] ?? null;
+            
+            // Prepare data for this child
+            $prepareData = array_merge(Arr::except($childData, ['children', 'id']), [
                 'parent_id' => $parent->id,
                 'order' => $childData['order'] ?? $index,
-            ]));
+            ]);
 
+            if ($childId) {
+                // Update existing
+                $child = Menu::findOrFail($childId);
+                $child->update($prepareData);
+                $processedIds[] = $childId;
+            } else {
+                // Create new
+                // Generate slug if name is provided
+                if (isset($prepareData['name']) && !isset($prepareData['slug'])) {
+                    $prepareData['slug'] = Str::slug(is_array($prepareData['name']) ? ($prepareData['name']['en'] ?? reset($prepareData['name'])) : $prepareData['name']);
+                }
+                $child = Menu::create($prepareData);
+                $processedIds[] = $child->id;
+            }
+
+            // Recurse into grandchildren
             if (isset($childData['children']) && is_array($childData['children'])) {
                 $this->syncChildren($child, $childData['children']);
             }
         }
+
+        // Delete (soft delete) existing children that were NOT in the payload
+        $parent->children()->whereNotIn('id', $processedIds)->delete();
     }
 
     /**

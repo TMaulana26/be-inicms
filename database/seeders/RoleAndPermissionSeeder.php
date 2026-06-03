@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Models\Permission;
 
 class RoleAndPermissionSeeder extends Seeder
 {
@@ -16,48 +16,100 @@ class RoleAndPermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // 1. Define standard CMS permissions
+        // 1. Define standard CMS permissions with localized display names
         $permissions = [
-            'view users' => 'User',
-            'create users' => 'User',
-            'edit users' => 'User',
-            'delete users' => 'User',
-            'view roles' => 'Role',
-            'manage roles' => 'Role',
-            'view permissions' => 'Permission',
-            'manage permissions' => 'Permission',
-            'view media' => 'Media',
-            'upload media' => 'Media',
-            'delete media' => 'Media',
+            'view users' => [
+                'menu' => 'User',
+                'display_name' => ['en' => 'View Users', 'id' => 'Lihat Pengguna']
+            ],
+            'create users' => [
+                'menu' => 'User',
+                'display_name' => ['en' => 'Create Users', 'id' => 'Tambah Pengguna']
+            ],
+            'edit users' => [
+                'menu' => 'User',
+                'display_name' => ['en' => 'Edit Users', 'id' => 'Ubah Pengguna']
+            ],
+            'delete users' => [
+                'menu' => 'User',
+                'display_name' => ['en' => 'Delete Users', 'id' => 'Hapus Pengguna']
+            ],
+            'view roles' => [
+                'menu' => 'Role',
+                'display_name' => ['en' => 'View Roles', 'id' => 'Lihat Peran']
+            ],
+            'manage roles' => [
+                'menu' => 'Role',
+                'display_name' => ['en' => 'Manage Roles', 'id' => 'Kelola Peran']
+            ],
+            'view permissions' => [
+                'menu' => 'Permission',
+                'display_name' => ['en' => 'View Permissions', 'id' => 'Lihat Izin']
+            ],
+            'manage permissions' => [
+                'menu' => 'Permission',
+                'display_name' => ['en' => 'Manage Permissions', 'id' => 'Kelola Izin']
+            ],
+            'view media' => [
+                'menu' => 'Media',
+                'display_name' => ['en' => 'View Media', 'id' => 'Lihat Media']
+            ],
+            'upload media' => [
+                'menu' => 'Media',
+                'display_name' => ['en' => 'Upload Media', 'id' => 'Unggah Media']
+            ],
+            'delete media' => [
+                'menu' => 'Media',
+                'display_name' => ['en' => 'Delete Media', 'id' => 'Hapus Media']
+            ],
         ];
 
         // 2. Create permissions
-        foreach ($permissions as $name => $menu) {
+        foreach ($permissions as $name => $data) {
             Permission::updateOrCreate(
                 ['name' => $name],
-                ['menu' => $menu]
+                [
+                    'menu' => $data['menu'],
+                    'display_name' => $data['display_name']
+                ]
             );
         }
 
         // 3. Create roles and assign permissions
+        $roles = [
+            'super-admin' => [
+                'en' => 'Super Admin',
+                'id' => 'Administrator Utama'
+            ],
+            'admin' => [
+                'en' => 'Administrator',
+                'id' => 'Administrator'
+            ],
+            'editor' => [
+                'en' => 'Editor',
+                'id' => 'Editor'
+            ],
+            'user' => [
+                'en' => 'Standard User',
+                'id' => 'Pengguna Biasa'
+            ],
+        ];
 
-        // Super Admin (usually bypasses permission checks entirely via a Gate, but we give the role anyway)
-        $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);
-        $superAdmin->givePermissionTo(Permission::all());
+        foreach ($roles as $name => $displayName) {
+            $role = Role::updateOrCreate(
+                ['name' => $name],
+                ['display_name' => $displayName]
+            );
 
-        // Admin (gets everything except maybe advanced super-admin specific stuff)
-        $admin = Role::firstOrCreate(['name' => 'admin']);
-        $admin->givePermissionTo(Permission::all());
-
-        // Editor (can handle media and standard content, but cannot manage users/roles)
-        $editor = Role::firstOrCreate(['name' => 'editor']);
-        $editor->givePermissionTo([
-            'view media',
-            'upload media',
-            'delete media',
-        ]);
-
-        // Standard User (minimum/no permissions out of the box)
-        $user = Role::firstOrCreate(['name' => 'user']);
+            if ($name === 'super-admin' || $name === 'admin') {
+                $role->syncPermissions(Permission::all());
+            } elseif ($name === 'editor') {
+                $role->syncPermissions([
+                    'view media',
+                    'upload media',
+                    'delete media',
+                ]);
+            }
+        }
     }
 }

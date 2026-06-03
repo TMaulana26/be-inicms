@@ -17,6 +17,7 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
+            'translations' => $this->when($request->boolean('with_translations'), $this->getTranslations()),
             'is_active' => (bool) $this->is_active,
             'posts_count' => $this->whenCounted('posts'),
             'created_at' => $this->created_at,

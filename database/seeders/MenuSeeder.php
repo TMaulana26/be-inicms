@@ -17,114 +17,109 @@ class MenuSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clean up old "Main Navigation" if it exists
-        Menu::where('slug', 'main-navigation')->withTrashed()->forceDelete();
+        // Clean up old menus to ensure a fresh structure
+        Menu::withTrashed()->forceDelete();
 
         $menus = [
             [
-                'title' => 'Home',
+                'title' => [
+                    'en' => 'Home',
+                    'id' => 'Beranda'
+                ],
+                'name' => [
+                    'en' => 'Home',
+                    'id' => 'Beranda'
+                ],
                 'icon' => 'Home',
                 'url' => '/home',
                 'order' => 0,
             ],
             [
-                'title' => 'Users',
-                'icon' => 'Users',
-                'url' => '/users',
+                'title' => [
+                    'en' => 'About Us',
+                    'id' => 'Tentang Kami'
+                ],
+                'name' => [
+                    'en' => 'About',
+                    'id' => 'Tentang'
+                ],
+                'icon' => 'Info',
+                'url' => '/about-us',
                 'order' => 1,
-                'children' => [
-                    [
-                        'title' => 'User Details',
-                        'icon' => 'User',
-                        'url' => '/users/:id',
-                        'order' => 0,
-                    ],
-                ]
             ],
             [
-                'title' => 'Roles',
-                'icon' => 'ShieldCheck',
-                'url' => '/roles',
+                'title' => [
+                    'en' => 'Blog',
+                    'id' => 'Blog'
+                ],
+                'name' => [
+                    'en' => 'Blog',
+                    'id' => 'Blog'
+                ],
+                'icon' => 'FileText',
+                'url' => '/blog',
                 'order' => 2,
                 'children' => [
                     [
-                        'title' => 'Role Details',
-                        'icon' => 'ShieldCheck',
-                        'url' => '/roles/:id',
+                        'title' => [
+                            'en' => 'Categories',
+                            'id' => 'Kategori'
+                        ],
+                        'url' => '/blog/categories',
                         'order' => 0,
+                    ],
+                    [
+                        'title' => [
+                            'en' => 'All Posts',
+                            'id' => 'Semua Tulisan'
+                        ],
+                        'url' => '/blog/posts',
+                        'order' => 1,
                     ],
                 ]
             ],
             [
-                'title' => 'Permissions',
-                'icon' => 'Key',
-                'url' => '/permissions',
+                'title' => [
+                    'en' => 'Admin Panel',
+                    'id' => 'Panel Admin'
+                ],
+                'name' => [
+                    'en' => 'Admin',
+                    'id' => 'Admin'
+                ],
+                'icon' => 'Settings',
+                'url' => '/admin',
                 'order' => 3,
                 'children' => [
                     [
-                        'title' => 'Permission Details',
-                        'icon' => 'Key',
-                        'url' => '/permissions/:id',
-                        'order' => 0,
-                    ],
-                ]
-            ],
-            [
-                'title' => 'Media Library',
-                'icon' => 'ImageIcon',
-                'url' => '/media',
-                'order' => 4,
-            ],
-            [
-                'title' => 'Menus',
-                'icon' => 'LayoutList',
-                'url' => '/menus',
-                'order' => 5,
-                'children' => [
-                    [
-                        'title' => 'Menu Management',
-                        'url' => '/menus',
+                        'title' => ['en' => 'Dashboard', 'id' => 'Dasbor'],
+                        'url' => '/admin/dashboard',
                         'order' => 0,
                     ],
                     [
-                        'title' => 'Menu Details',
-                        'icon' => 'Menu',
-                        'url' => '/menus/:id',
+                        'title' => ['en' => 'Content', 'id' => 'Konten'],
+                        'url' => '/admin/content',
                         'order' => 1,
+                        'children' => [
+                            ['title' => ['en' => 'Pages', 'id' => 'Halaman'], 'url' => '/admin/pages'],
+                            ['title' => ['en' => 'Posts', 'id' => 'Postingan'], 'url' => '/admin/posts'],
+                        ]
                     ],
                     [
-                        'title' => 'Menu Items',
-                        'icon' => 'LayoutList',
-                        'url' => '/menus/items',
+                        'title' => ['en' => 'System', 'id' => 'Sistem'],
+                        'url' => '/admin/system',
                         'order' => 2,
+                        'children' => [
+                            ['title' => ['en' => 'Users', 'id' => 'Pengguna'], 'url' => '/admin/users'],
+                            ['title' => ['en' => 'Settings', 'id' => 'Pengaturan'], 'url' => '/admin/settings'],
+                        ]
                     ],
                 ]
-            ],
-            [
-                'title' => 'Settings',
-                'icon' => 'Settings',
-                'url' => '/settings',
-                'order' => 6,
-            ],
-            [
-                'title' => 'My Profile',
-                'icon' => 'User',
-                'url' => '/profile',
-                'order' => 7,
             ],
         ];
 
         foreach ($menus as $menuData) {
-            // Match root menus by title
-            $menu = Menu::where('title', $menuData['title'])->whereNull('parent_id')->first();
-            
-            if ($menu) {
-                // Update existing root menu
-                $this->menuService->update($menu, $menuData);
-            } else {
-                // Store new root menu
-                $this->menuService->store($menuData);
-            }
+            $this->menuService->store($menuData);
         }
     }
 }

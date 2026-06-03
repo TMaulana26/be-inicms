@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Page\Database\Seeders;
+use Database\Seeders\PageSeeder;
 
 use Illuminate\Database\Seeder;
 
@@ -11,6 +12,8 @@ class PageDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            PageSeeder::class,
+        ]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Modules\Acl\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            RoleAndPermissionSeeder::class,
-            AdminUserSeeder::class,
-            SettingSeeder::class,
-            MenuSeeder::class,
-        ]);
+        // 1. Core / ACL (Dependencies)
+        $this->call(RoleAndPermissionSeeder::class);
+        $this->call(AdminUserSeeder::class);
+        $this->call(SettingSeeder::class);
+
+        // 2. Content Modules
+        $this->call(PageSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(PostSeeder::class);
+
+        // 3. Navigation (Last as it links to content)
+        $this->call(MenuSeeder::class);
     }
 }

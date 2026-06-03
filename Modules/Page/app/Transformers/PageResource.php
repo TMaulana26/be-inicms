@@ -21,6 +21,7 @@ class PageResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
+            'translations' => $this->when($request->boolean('with_translations'), $this->getTranslations()),
             'status' => $this->status,
             'page_image' => $this->getFirstMediaUrl('page_image'),
             'created_at' => $this->created_at,

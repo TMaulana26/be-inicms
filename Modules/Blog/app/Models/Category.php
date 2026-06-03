@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Blog\Database\Factories\CategoryFactory;
 
+use Spatie\Translatable\HasTranslations;
+
 class Category extends Model
 {
-    use HasFactory, SoftDeletes, HasActiveStatus;
+    use HasFactory, SoftDeletes, HasActiveStatus, HasTranslations;
+
+    public $translatable = ['name', 'description'];
 
     /**
      * The attributes that are mass assignable.

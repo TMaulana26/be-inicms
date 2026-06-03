@@ -3,7 +3,7 @@
 This guide covers how to manage dynamic navigation structures using our recursive menu system.
 
 > [!NOTE]
-> Menus are handled by the `Menu` module. It uses a self-referencing table structure where "Menus" are root nodes and "Menu Items" are children linked via `parent_id`.
+> Menus are handled by the `Menu` module. It uses a self-referencing `menus` table structure. Root nodes represent "Menu Groups" (e.g., Main Navbar), and child nodes represent the actual "Menu Items" linked via `parent_id`.
 
 ---
 
@@ -11,7 +11,7 @@ This guide covers how to manage dynamic navigation structures using our recursiv
 
 - **Base URL**: `/api/v1`
 - **Prefix**: `/menus`
-- **Key Features**: Recursive tree loading, automatic slug generation, and order management.
+- **Key Features**: Recursive tree loading, automatic slug generation, order management, and **Localization (i18n)**.
 
 ---
 
@@ -31,12 +31,28 @@ This guide covers how to manage dynamic navigation structures using our recursiv
 
 ---
 
-## 🌳 Recursive Tree Structure
+## 🌳 Recursive Tree Management
 
-When you fetch a menu, it returns a nested structure using the `children` key.
+### Intelligent Synchronization
+When updating a menu via `PUT/PATCH /menus/{id}`, you can provide a nested `children` array. Our system performs an **intelligent sync**:
+1.  **Update**: If a child item has an `id`, it is updated in place (preserving its database identity).
+2.  **Create**: If a child item lacks an `id`, it is created as a new node.
+3.  **Delete**: Any existing child item NOT present in the provided array is automatically soft-deleted.
 
-- **Root Menu**: `parent_id` is `null`.
-- **Menu Item**: `parent_id` refers to a parent node.
+This allows for deep, recursive management of entire menu branches in a single API call without breaking database references.
+
+---
+
+## 🌍 Localization (i18n)
+
+The Menu module supports multiple languages.
+- **Translatable Fields**: `name`, `description` (for Groups) and `title` (for Items).
+- **Usage**:
+    - Pass a string for the current locale: `"title": "Home"`
+    - Or pass an object for multiple languages: `"title": {"en": "Home", "id": "Beranda"}`
+- **API Response**: By default returns the string for the active locale. Use `?with_translations=1` to see the full JSON object.
+
+---
 
 ### Management Best Practices
 
@@ -59,5 +75,6 @@ When you fetch a menu, it returns a nested structure using the `children` key.
 ---
 
 ## 📚 Related Guides
+- **[Localization Guide](./LOCALIZATION_GUIDE.md)**: Global multi-language setup.
 - **[System Settings](./SETTING_GUIDE.md)**: Configuring menu location constants.
 - **[Documentation Index](./README.md)**: Return to main menu.

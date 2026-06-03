@@ -22,6 +22,7 @@ class MenuResource extends JsonResource
             'title' => $this->title,
             'icon' => $this->icon,
             'description' => $this->description,
+            'translations' => $this->when($request->boolean('with_translations'), $this->getTranslations()),
             'url' => $this->url,
             'target' => $this->target,
             'order' => $this->order,

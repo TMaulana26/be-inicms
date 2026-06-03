@@ -9,9 +9,13 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+use Spatie\Translatable\HasTranslations;
+
 class Setting extends Model implements HasMedia
 {
-    use InteractsWithMedia, SoftDeletes, HasActiveStatus;
+    use InteractsWithMedia, SoftDeletes, HasActiveStatus, HasTranslations;
+
+    public $translatable = ['value', 'description'];
 
     protected $fillable = [
         'key',

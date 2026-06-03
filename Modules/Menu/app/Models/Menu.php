@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasActiveStatus;
 
+use Spatie\Translatable\HasTranslations;
+
 class Menu extends Model
 {
-    use SoftDeletes, HasActiveStatus;
+    use SoftDeletes, HasActiveStatus, HasTranslations;
+
+    public $translatable = ['name', 'title', 'description'];
 
     protected $fillable = [
         'parent_id',

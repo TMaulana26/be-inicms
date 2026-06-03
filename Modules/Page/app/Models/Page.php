@@ -10,9 +10,13 @@ use Modules\Page\Database\Factories\PageFactory;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+use Spatie\Translatable\HasTranslations;
+
 class Page extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, SoftDeletes, InteractsWithMedia, HasTranslations;
+
+    public $translatable = ['title', 'content'];
 
     /**
      * The attributes that are mass assignable.
