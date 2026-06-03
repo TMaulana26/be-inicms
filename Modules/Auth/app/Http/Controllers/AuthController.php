@@ -60,15 +60,40 @@ class AuthController extends Controller
     /**
      * Get the authenticated user's details.
      */
-    public function me(Request $request): JsonResponse
+    public function user(Request $request): JsonResponse
     {
         $user = $request->user();
         $token = $user->currentAccessToken();
 
         return $this->successResponse([
             'user' => new UserResource($user->load('roles', 'permissions')),
-            'expires_at' => $token->expires_at ? $token->expires_at->toDateTimeString() : null,
+            'expires_at' => ($token && $token->expires_at) ? $token->expires_at->toDateTimeString() : null,
         ], 'Authenticated user details.');
+    }
+
+    /**
+     * Refresh the current authenticated user's token.
+     */
+    public function refresh(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        
+        // Revoke current token
+        $token = $user->currentAccessToken();
+        if ($token) {
+            $token->delete();
+        }
+
+        // Issue new token
+        $expiresAt = now()->addMinutes(config('sanctum.expiration', 60));
+        $token = $user->createToken('auth_token', ['*'], $expiresAt)->plainTextToken;
+
+        return $this->successResponse([
+            'user' => new UserResource($user->load('roles', 'permissions')),
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_at' => $expiresAt->toDateTimeString(),
+        ], 'Token refreshed successfully.');
     }
 
     /**

@@ -89,7 +89,10 @@ class AuthService
 
     public function logout(User $user): void
     {
-        $user->currentAccessToken()->delete();
+        $token = $user->currentAccessToken();
+        if ($token) {
+            $token->delete();
+        }
     }
 
     public function verifyEmail(User $user, string $hash): bool
