@@ -25,6 +25,14 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     protected $guard_name = 'web';
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\UserFactory::new();
+    }
+
+    /**
      * Send the email verification notification.
      */
     public function sendEmailVerificationNotification(): void

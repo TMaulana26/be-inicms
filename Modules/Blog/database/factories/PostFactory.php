@@ -18,7 +18,7 @@ class PostFactory extends Factory
     {
         return [
             'category_id' => \Modules\Blog\Models\Category::factory(),
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Modules\Acl\Models\User::factory(),
             'title' => $this->faker->sentence(),
             'slug' => \Illuminate\Support\Str::slug($this->faker->sentence()),
             'summary' => $this->faker->text(200),

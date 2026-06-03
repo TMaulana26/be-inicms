@@ -17,7 +17,7 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Modules\Acl\Models\User::factory(),
             'title' => $this->faker->sentence(),
             'slug' => \Illuminate\Support\Str::slug($this->faker->sentence()),
             'content' => $this->faker->paragraphs(8, true),
