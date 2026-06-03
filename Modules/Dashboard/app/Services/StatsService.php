@@ -59,6 +59,18 @@ class StatsService
                 'draft' => \Modules\Page\Models\Page::where('status', 'draft')->count(),
                 'deleted' => \Modules\Page\Models\Page::onlyTrashed()->count(),
             ],
+            'menus' => [
+                'all' => \Modules\Menu\Models\Menu::count(),
+                'active' => \Modules\Menu\Models\Menu::where('is_active', true)->count(),
+                'inactive' => \Modules\Menu\Models\Menu::where('is_active', false)->count(),
+                'deleted' => \Modules\Menu\Models\Menu::onlyTrashed()->count(),
+            ],
+            'settings' => [
+                'all' => \Modules\Setting\Models\Setting::count(),
+                'active' => \Modules\Setting\Models\Setting::where('is_active', true)->count(),
+                'inactive' => \Modules\Setting\Models\Setting::where('is_active', false)->count(),
+                'deleted' => \Modules\Setting\Models\Setting::onlyTrashed()->count(),
+            ],
         ];
     }
 }

@@ -19,6 +19,11 @@ class StatsResource extends JsonResource
             'roles' => $this->resource['roles'],
             'permissions' => $this->resource['permissions'],
             'media' => $this->resource['media'],
+            'categories' => $this->resource['categories'],
+            'posts' => $this->resource['posts'],
+            'pages' => $this->resource['pages'],
+            'menus' => $this->resource['menus'],
+            'settings' => $this->resource['settings'],
         ];
     }
 }
