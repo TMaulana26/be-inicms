@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Modules\Setting\Models\Setting;
 use Illuminate\Database\Seeder;
+use Modules\Setting\Models\Setting;
 
 class SettingSeeder extends Seeder
 {
@@ -19,13 +19,13 @@ class SettingSeeder extends Seeder
                 'name' => 'Site Name',
                 'value' => [
                     'en' => 'INI CMS',
-                    'id' => 'INI CMS'
+                    'id' => 'INI CMS',
                 ],
                 'type' => 'string',
                 'group' => 'general',
                 'description' => [
                     'en' => 'The name of your website.',
-                    'id' => 'Nama situs web Anda.'
+                    'id' => 'Nama situs web Anda.',
                 ],
             ],
             [
@@ -33,13 +33,13 @@ class SettingSeeder extends Seeder
                 'name' => 'Site Description',
                 'value' => [
                     'en' => 'A modern headless CMS.',
-                    'id' => 'CMS headless modern.'
+                    'id' => 'CMS headless modern.',
                 ],
                 'type' => 'string',
                 'group' => 'general',
                 'description' => [
                     'en' => 'A brief description of your website.',
-                    'id' => 'Deskripsi singkat tentang situs web Anda.'
+                    'id' => 'Deskripsi singkat tentang situs web Anda.',
                 ],
             ],
             // Appearance
@@ -51,7 +51,7 @@ class SettingSeeder extends Seeder
                 'group' => 'appearance',
                 'description' => [
                     'en' => 'The logo of your website.',
-                    'id' => 'Logo situs web Anda.'
+                    'id' => 'Logo situs web Anda.',
                 ],
             ],
             [
@@ -62,7 +62,7 @@ class SettingSeeder extends Seeder
                 'group' => 'appearance',
                 'description' => [
                     'en' => 'The primary color of your theme.',
-                    'id' => 'Warna utama tema Anda.'
+                    'id' => 'Warna utama tema Anda.',
                 ],
             ],
             // Contact
@@ -74,7 +74,7 @@ class SettingSeeder extends Seeder
                 'group' => 'contact',
                 'description' => [
                     'en' => 'The email address for contact inquiries.',
-                    'id' => 'Alamat email untuk pertanyaan kontak.'
+                    'id' => 'Alamat email untuk pertanyaan kontak.',
                 ],
             ],
             // Maintenance
@@ -86,7 +86,7 @@ class SettingSeeder extends Seeder
                 'group' => 'maintenance',
                 'description' => [
                     'en' => 'Enable or disable maintenance mode.',
-                    'id' => 'Aktifkan atau nonaktifkan mode pemeliharaan.'
+                    'id' => 'Aktifkan atau nonaktifkan mode pemeliharaan.',
                 ],
             ],
         ];

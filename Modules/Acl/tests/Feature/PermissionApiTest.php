@@ -1,8 +1,8 @@
 <?php
 
-use Modules\Acl\Models\User;
-use Modules\Acl\Models\Role;
 use Modules\Acl\Models\Permission;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Models\User;
 
 test('guests cannot access permissions list', function () {
     $this->getJson('/api/v1/permissions')->assertStatus(401);
@@ -19,8 +19,8 @@ test('authorized user can list permissions', function () {
             'success',
             'message',
             'data' => [
-                '*' => ['id', 'name', 'display_name', 'is_active', 'roles']
-            ]
+                '*' => ['id', 'name', 'display_name', 'is_active', 'roles'],
+            ],
         ]);
 });
 

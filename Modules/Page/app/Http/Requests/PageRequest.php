@@ -27,7 +27,7 @@ class PageRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                $id ? 'unique:pages,title,' . $id : 'unique:pages,title',
+                $id ? 'unique:pages,title,'.$id : 'unique:pages,title',
             ],
             'content' => ['required', 'string'],
             'status' => ['required', 'string', 'in:draft,published'],

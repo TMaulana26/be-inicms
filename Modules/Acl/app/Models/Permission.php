@@ -2,15 +2,14 @@
 
 namespace Modules\Acl\Models;
 
-use Spatie\Permission\Models\Permission as SpatiePermission;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasActiveStatus;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 use Spatie\Translatable\HasTranslations;
 
 class Permission extends SpatiePermission
 {
-    use SoftDeletes, HasActiveStatus, HasTranslations;
+    use HasActiveStatus, HasTranslations, SoftDeletes;
 
     public $translatable = ['display_name'];
 

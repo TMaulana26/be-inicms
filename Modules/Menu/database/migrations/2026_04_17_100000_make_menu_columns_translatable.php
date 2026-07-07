@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -77,7 +77,7 @@ return new class extends Migration
         // Down logic simplified for brevity assuming standard revert is enough
         // but adding checks for safety
         if (Schema::hasColumn('menus', 'name')) {
-             // Logic to revert JSON to string...
+            // Logic to revert JSON to string...
         }
     }
 };

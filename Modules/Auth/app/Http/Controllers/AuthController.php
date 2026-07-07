@@ -3,23 +3,21 @@
 namespace Modules\Auth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
-use Modules\Auth\Http\Requests\Auth\LoginRequest;
-use Modules\Auth\Http\Requests\Auth\RegisterRequest;
-use Modules\Auth\Http\Requests\Auth\ForgotPasswordRequest;
-use Modules\Auth\Http\Requests\Auth\ResetPasswordRequest;
-use Modules\Auth\Services\AuthService;
-use Modules\Acl\Transformers\UserResource;
-use Modules\Acl\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\Acl\Models\User;
+use Modules\Acl\Transformers\UserResource;
+use Modules\Auth\Http\Requests\Auth\ForgotPasswordRequest;
+use Modules\Auth\Http\Requests\Auth\LoginRequest;
+use Modules\Auth\Http\Requests\Auth\RegisterRequest;
+use Modules\Auth\Http\Requests\Auth\ResetPasswordRequest;
+use Modules\Auth\Services\AuthService;
 
 class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService
-    ) {
-    }
+    ) {}
 
     /**
      * Register a new user.
@@ -77,7 +75,7 @@ class AuthController extends Controller
     public function refresh(Request $request): JsonResponse
     {
         $user = $request->user();
-        
+
         // Revoke current token
         $token = $user->currentAccessToken();
         if ($token) {
@@ -124,7 +122,6 @@ class AuthController extends Controller
 
         return $this->errorResponse('Email could not be verified.', 500);
     }
-
 
     /**
      * Resend the email verification notification.

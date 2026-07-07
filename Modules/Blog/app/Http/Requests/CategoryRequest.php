@@ -28,9 +28,9 @@ class CategoryRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                $id 
-                    ? 'unique:categories,name,' . $id . ',id,type,' . ($this->type ?? 'post')
-                    : 'unique:categories,name,NULL,id,type,' . ($this->type ?? 'post'),
+                $id
+                    ? 'unique:categories,name,'.$id.',id,type,'.($this->type ?? 'post')
+                    : 'unique:categories,name,NULL,id,type,'.($this->type ?? 'post'),
             ],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],

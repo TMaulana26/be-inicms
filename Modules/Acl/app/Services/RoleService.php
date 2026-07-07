@@ -2,10 +2,9 @@
 
 namespace Modules\Acl\Services;
 
-use Modules\Acl\Models\Role;
-use Illuminate\Support\Facades\DB;
-
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Support\Facades\DB;
+use Modules\Acl\Models\Role;
 
 class RoleService
 {
@@ -89,7 +88,7 @@ class RoleService
                     'delete' => Role::whereIn('id', $foundIds)->delete(),
                     'restore' => Role::onlyTrashed()->whereIn('id', $foundIds)->restore(),
                     'forceDelete' => Role::onlyTrashed()->whereIn('id', $foundIds)->forceDelete(),
-                    'toggle' => $roles->each(fn($r) => $r->update(['is_active' => !$r->is_active])),
+                    'toggle' => $roles->each(fn ($r) => $r->update(['is_active' => ! $r->is_active])),
                 };
 
                 if ($operation !== 'forceDelete') {
@@ -99,7 +98,7 @@ class RoleService
 
             return [
                 'affected' => $roles,
-                'failed_ids' => $failedIds
+                'failed_ids' => $failedIds,
             ];
         });
     }
@@ -109,7 +108,8 @@ class RoleService
      */
     public function toggleStatus(Role $role): Role
     {
-        $role->update(['is_active' => !$role->is_active]);
+        $role->update(['is_active' => ! $role->is_active]);
+
         return $role;
     }
 
@@ -121,6 +121,7 @@ class RoleService
         return DB::transaction(function () use ($id) {
             $role = Role::onlyTrashed()->findOrFail($id);
             $role->restore();
+
             return $role->refresh();
         });
     }
@@ -134,6 +135,7 @@ class RoleService
             $role = Role::onlyTrashed()->findOrFail($id);
             $roleData = clone $role;
             $role->forceDelete();
+
             return $roleData;
         });
     }
@@ -145,6 +147,7 @@ class RoleService
     {
         return DB::transaction(function () use ($role, $permissions) {
             $role->syncPermissions($permissions);
+
             return $role->refresh();
         });
     }
@@ -156,6 +159,7 @@ class RoleService
     {
         return DB::transaction(function () use ($role, $permissions) {
             $role->givePermissionTo($permissions);
+
             return $role->refresh();
         });
     }
@@ -169,6 +173,7 @@ class RoleService
             foreach ($permissions as $permission) {
                 $role->revokePermissionTo($permission);
             }
+
             return $role->refresh();
         });
     }

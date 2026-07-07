@@ -28,6 +28,7 @@ class CustomResetPassword extends ResetPassword
     protected function resetUrl($notifiable)
     {
         $frontendUrl = config('app.frontend_url', 'http://localhost:3000');
-        return $frontendUrl . '/reset-password?token=' . $this->token . '&email=' . $notifiable->getEmailForPasswordReset();
+
+        return $frontendUrl.'/reset-password?token='.$this->token.'&email='.$notifiable->getEmailForPasswordReset();
     }
 }

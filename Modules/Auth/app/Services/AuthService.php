@@ -2,13 +2,13 @@
 
 namespace Modules\Auth\Services;
 
-use Modules\Acl\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Modules\Acl\Models\User;
 
 class AuthService
 {
@@ -43,13 +43,13 @@ class AuthService
         /** @var User $user */
         $user = User::where('email', $credentials['email'])->first();
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['Invalid credentials.'],
             ]);
         }
 
-        if (!$user->is_active) {
+        if (! $user->is_active) {
             throw ValidationException::withMessages([
                 'email' => ['Your account is inactive.'],
             ]);
@@ -97,7 +97,7 @@ class AuthService
 
     public function verifyEmail(User $user, string $hash): bool
     {
-        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
             return false;
         }
 
@@ -107,6 +107,7 @@ class AuthService
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
+
             return true;
         }
 
@@ -120,6 +121,7 @@ class AuthService
         }
 
         $user->sendEmailVerificationNotification();
+
         return true;
     }
 

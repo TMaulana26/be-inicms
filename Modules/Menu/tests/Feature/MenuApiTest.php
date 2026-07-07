@@ -22,8 +22,8 @@ test('authorized user can list menus', function () {
             'success',
             'message',
             'data' => [
-                '*' => ['id', 'name', 'slug', 'title', 'description', 'url', 'target', 'order', 'is_active', 'children']
-            ]
+                '*' => ['id', 'name', 'slug', 'title', 'description', 'url', 'target', 'order', 'is_active', 'children'],
+            ],
         ]);
 });
 
@@ -46,8 +46,8 @@ test('authorized user can create menu with children', function () {
                 'url' => '/about',
                 'target' => '_self',
                 'order' => 2,
-            ]
-        ]
+            ],
+        ],
     ];
 
     $this->actingAs($user, 'sanctum')
@@ -88,7 +88,7 @@ test('authorized user can update menu and its children', function () {
         'slug' => 'header-menu',
         'is_active' => true,
     ]);
-    
+
     $child = Menu::create([
         'parent_id' => $menu->id,
         'name' => 'Old Child',
@@ -112,8 +112,8 @@ test('authorized user can update menu and its children', function () {
                 'title' => 'New Child Link',
                 'url' => '/new-link',
                 'order' => 2,
-            ]
-        ]
+            ],
+        ],
     ];
 
     $this->actingAs($user, 'sanctum')

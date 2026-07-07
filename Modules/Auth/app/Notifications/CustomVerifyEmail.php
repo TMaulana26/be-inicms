@@ -65,7 +65,7 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
             ->subject('Verify Email Address - IniCMS')
             ->view('emails.verify', [
                 'url' => $verificationUrl,
-                'user' => $notifiable
+                'user' => $notifiable,
             ]);
     }
 }

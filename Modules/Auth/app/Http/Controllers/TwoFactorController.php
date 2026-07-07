@@ -3,10 +3,9 @@
 namespace Modules\Auth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
-use Modules\Auth\Services\TwoFactorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\Auth\Services\TwoFactorService;
 
 class TwoFactorController extends Controller
 {
@@ -22,7 +21,7 @@ class TwoFactorController extends Controller
         $user = $request->user();
 
         // Check if verified first
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             return $this->errorResponse('You must verify your email before enabling Two-Factor Authentication.', 403);
         }
 
@@ -74,7 +73,7 @@ class TwoFactorController extends Controller
         $user = $request->user();
 
         // Verify the code
-        if (!$this->twoFactorService->verifyChallenge($user, $request->code, $request->recovery_code)) {
+        if (! $this->twoFactorService->verifyChallenge($user, $request->code, $request->recovery_code)) {
             return $this->errorResponse('The provided two factor authentication code was invalid.', 403);
         }
 

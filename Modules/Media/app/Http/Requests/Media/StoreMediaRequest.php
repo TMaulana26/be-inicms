@@ -14,8 +14,6 @@ class StoreMediaRequest extends FormRequest
         return true; // Authentication handled by middleware
     }
 
-
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,7 +26,7 @@ class StoreMediaRequest extends FormRequest
                 'required',
                 'file',
                 'max:5120', // Max 5MB
-                'mimes:jpeg,png,jpg,gif,svg,webp,pdf,doc,docx,xls,xlsx'
+                'mimes:jpeg,png,jpg,gif,svg,webp,pdf,doc,docx,xls,xlsx',
             ],
             'name' => ['nullable', 'string', 'max:255'],
             'collection' => ['nullable', 'string', 'max:50'],

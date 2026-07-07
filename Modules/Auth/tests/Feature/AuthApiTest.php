@@ -1,8 +1,7 @@
 <?php
 
-use Modules\Acl\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+use Modules\Acl\Models\User;
 
 test('guest can register a new user', function () {
     \Illuminate\Support\Facades\Notification::fake();
@@ -24,7 +23,7 @@ test('guest can register a new user', function () {
                 'access_token',
                 'token_type',
                 'expires_at',
-            ]
+            ],
         ]);
 
     $this->assertDatabaseHas('users', ['email' => 'jane@example.com']);
@@ -65,7 +64,7 @@ test('user can login successfully', function () {
                 'access_token',
                 'token_type',
                 'expires_at',
-            ]
+            ],
         ]);
 });
 
@@ -130,7 +129,7 @@ test('authenticated user can refresh token', function () {
                 'access_token',
                 'token_type',
                 'expires_at',
-            ]
+            ],
         ]);
 });
 

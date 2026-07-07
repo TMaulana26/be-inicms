@@ -3,16 +3,15 @@
 namespace Modules\Acl\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
-use Modules\Acl\Models\Role;
-use Modules\Acl\Http\Requests\Role\StoreRoleRequest;
-use Modules\Acl\Http\Requests\Role\UpdateRoleRequest;
-use Modules\Acl\Http\Requests\Role\IndexRoleRequest;
-use Modules\Acl\Http\Requests\Role\AssignPermissionRequest;
-use Modules\Acl\Transformers\RoleResource;
-use Modules\Acl\Services\RoleService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
+use Modules\Acl\Http\Requests\Role\AssignPermissionRequest;
+use Modules\Acl\Http\Requests\Role\IndexRoleRequest;
+use Modules\Acl\Http\Requests\Role\StoreRoleRequest;
+use Modules\Acl\Http\Requests\Role\UpdateRoleRequest;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Services\RoleService;
+use Modules\Acl\Transformers\RoleResource;
 
 class RoleController extends Controller
 {

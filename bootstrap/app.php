@@ -25,9 +25,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'The requested resource was not found.',
-                    'data'    => null,
-                    'errors'  => [
-                        'resource' => ['Resource does not exist or has been removed.']
+                    'data' => null,
+                    'errors' => [
+                        'resource' => ['Resource does not exist or has been removed.'],
                     ],
                 ], 404);
             }
@@ -49,15 +49,15 @@ return Application::configure(basePath: dirname(__DIR__))
                 $errors = $original['errors'] ?? null;
 
                 // Handle generic client/server errors that haven't been structured yet
-                if (!$response->isSuccessful() && !$errors) {
+                if (! $response->isSuccessful() && ! $errors) {
                     $errors = ['message' => [$original['message'] ?? $response->statusText()]];
                 }
 
                 return response()->json([
                     'success' => $response->isSuccessful(),
                     'message' => $original['message'] ?? ($response->statusText() ?: 'An error occurred'),
-                    'data'    => $data,
-                    'errors'  => $errors,
+                    'data' => $data,
+                    'errors' => $errors,
                 ], $response->getStatusCode());
             }
 

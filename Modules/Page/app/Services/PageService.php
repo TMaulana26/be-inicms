@@ -3,9 +3,9 @@
 namespace Modules\Page\Services;
 
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Page\Models\Page;
-use Illuminate\Support\Facades\DB;
 
 class PageService
 {
@@ -20,6 +20,7 @@ class PageService
         if ($withTrashed) {
             $query->withTrashed();
         }
+
         return $query->findOrFail($id);
     }
 
@@ -34,7 +35,7 @@ class PageService
             $query,
             $params,
             ['title', 'slug', 'content'],
-            fn($q) => $q->when($params['status'] ?? null, fn($subQ, $status) => $subQ->where('status', $status))
+            fn ($q) => $q->when($params['status'] ?? null, fn ($subQ, $status) => $subQ->where('status', $status))
         );
     }
 
@@ -96,6 +97,7 @@ class PageService
         return DB::transaction(function () use ($id) {
             $page = Page::onlyTrashed()->findOrFail($id);
             $page->restore();
+
             return $page->refresh();
         });
     }
@@ -109,6 +111,7 @@ class PageService
             $page = Page::onlyTrashed()->findOrFail($id);
             $pageData = clone $page;
             $page->forceDelete();
+
             return $pageData;
         });
     }
@@ -165,8 +168,8 @@ class PageService
         $originalSlug = $slug;
         $count = 1;
 
-        while (Page::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+        while (Page::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;

@@ -3,16 +3,14 @@
 namespace Modules\Media\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
+use App\Traits\HandlesBulkAndSoftDeletes;
+use Illuminate\Http\JsonResponse;
 use Modules\Media\Http\Requests\Media\IndexMediaRequest;
 use Modules\Media\Http\Requests\Media\StoreMediaRequest;
 use Modules\Media\Http\Requests\Media\UpdateMediaRequest;
 use Modules\Media\Models\Media;
 use Modules\Media\Services\MediaService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Modules\Media\Transformers\MediaResource;
-use App\Traits\HandlesBulkAndSoftDeletes;
 
 class MediaController extends Controller
 {

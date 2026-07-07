@@ -2,11 +2,11 @@
 
 namespace Modules\Auth\Services;
 
-use Modules\Acl\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\RecoveryCode;
-use Illuminate\Validation\ValidationException;
+use Modules\Acl\Models\User;
 
 class TwoFactorService
 {
@@ -44,7 +44,7 @@ class TwoFactorService
     {
         if (empty($user->two_factor_secret) ||
             empty($code) ||
-            !$this->provider->verify(decrypt($user->two_factor_secret), $code)) {
+            ! $this->provider->verify(decrypt($user->two_factor_secret), $code)) {
 
             throw ValidationException::withMessages([
                 'code' => ['The provided two factor authentication code was invalid.'],
@@ -84,6 +84,7 @@ class TwoFactorService
 
             if (in_array($recoveryCode, $recoveryCodes)) {
                 $user->replaceRecoveryCode($recoveryCode);
+
                 return true;
             }
         }

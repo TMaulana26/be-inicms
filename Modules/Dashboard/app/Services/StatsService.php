@@ -2,17 +2,15 @@
 
 namespace Modules\Dashboard\Services;
 
-use Modules\Media\Models\Media;
-use Modules\Acl\Models\User;
-use Modules\Acl\Models\Role;
 use Modules\Acl\Models\Permission;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Models\User;
+use Modules\Media\Models\Media;
 
 class StatsService
 {
     /**
      * Get dashboard statistics for users, roles, and permissions.
-     *
-     * @return array
      */
     public function getDashboardStats(): array
     {

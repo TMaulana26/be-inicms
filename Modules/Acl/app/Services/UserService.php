@@ -2,11 +2,9 @@
 
 namespace Modules\Acl\Services;
 
-use Modules\Acl\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Support\Facades\DB;
+use Modules\Acl\Models\User;
 
 class UserService
 {
@@ -96,6 +94,7 @@ class UserService
     {
         return DB::transaction(function () use ($user, $roles) {
             $user->syncRoles($roles);
+
             return $user->refresh();
         });
     }
@@ -107,6 +106,7 @@ class UserService
     {
         return DB::transaction(function () use ($user, $roles) {
             $user->assignRole($roles);
+
             return $user->refresh();
         });
     }
@@ -120,6 +120,7 @@ class UserService
             foreach ($roles as $role) {
                 $user->removeRole($role);
             }
+
             return $user->refresh();
         });
     }
@@ -127,9 +128,7 @@ class UserService
     /**
      * Perform bulk operations on users.
      *
-     * @param array $ids
-     * @param string $operation (delete|restore|forceDelete|toggle)
-     * @return array
+     * @param  string  $operation  (delete|restore|forceDelete|toggle)
      */
     public function handleBulkOperation(array $ids, string $operation): array
     {
@@ -151,7 +150,7 @@ class UserService
                     'delete' => User::whereIn('id', $foundIds)->delete(),
                     'restore' => User::onlyTrashed()->whereIn('id', $foundIds)->restore(),
                     'forceDelete' => User::onlyTrashed()->whereIn('id', $foundIds)->forceDelete(),
-                    'toggle' => $users->each(fn($u) => $u->update(['is_active' => !$u->is_active])),
+                    'toggle' => $users->each(fn ($u) => $u->update(['is_active' => ! $u->is_active])),
                 };
 
                 // Refresh models to reflect changes (e.g. deleted_at, is_active)
@@ -173,7 +172,8 @@ class UserService
     public function toggleStatus(User $user): User
     {
         return DB::transaction(function () use ($user) {
-            $user->update(['is_active' => !$user->is_active]);
+            $user->update(['is_active' => ! $user->is_active]);
+
             return $user->refresh();
         });
     }
@@ -186,6 +186,7 @@ class UserService
         return DB::transaction(function () use ($id) {
             $user = User::onlyTrashed()->findOrFail($id);
             $user->restore();
+
             return $user->refresh();
         });
     }
@@ -200,6 +201,7 @@ class UserService
             // We clone or store data before deletion to return it in the resource if needed
             $userData = clone $user;
             $user->forceDelete();
+
             return $userData;
         });
     }

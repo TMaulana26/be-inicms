@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Shared\BulkRequest;
+use Illuminate\Http\JsonResponse;
 
 trait HandlesBulkAndSoftDeletes
 {
@@ -41,7 +41,7 @@ trait HandlesBulkAndSoftDeletes
 
         return $this->resourceResponse(
             new $resourceClass($model),
-            ucfirst($this->getModelName()) . ' restored successfully.'
+            ucfirst($this->getModelName()).' restored successfully.'
         );
     }
 
@@ -55,7 +55,7 @@ trait HandlesBulkAndSoftDeletes
 
         return $this->resourceResponse(
             new $resourceClass($model),
-            ucfirst($this->getModelName()) . ' permanently deleted.'
+            ucfirst($this->getModelName()).' permanently deleted.'
         );
     }
 

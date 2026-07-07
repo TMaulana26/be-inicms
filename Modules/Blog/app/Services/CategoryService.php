@@ -19,6 +19,7 @@ class CategoryService
         if ($withTrashed) {
             $query->withTrashed();
         }
+
         return $query->findOrFail($id);
     }
 
@@ -33,7 +34,7 @@ class CategoryService
             $query,
             $params,
             ['name', 'slug', 'description'],
-            fn($q) => $q->where('type', $params['type'] ?? 'post')
+            fn ($q) => $q->where('type', $params['type'] ?? 'post')
         );
     }
 
@@ -78,7 +79,8 @@ class CategoryService
     public function toggleStatus(Category $category): Category
     {
         return \Illuminate\Support\Facades\DB::transaction(function () use ($category) {
-            $category->update(['is_active' => !$category->is_active]);
+            $category->update(['is_active' => ! $category->is_active]);
+
             return $category->refresh();
         });
     }
@@ -91,6 +93,7 @@ class CategoryService
         return \Illuminate\Support\Facades\DB::transaction(function () use ($id) {
             $category = Category::onlyTrashed()->findOrFail($id);
             $category->restore();
+
             return $category->refresh();
         });
     }
@@ -104,6 +107,7 @@ class CategoryService
             $category = Category::onlyTrashed()->findOrFail($id);
             $categoryData = clone $category;
             $category->forceDelete();
+
             return $categoryData;
         });
     }
@@ -140,7 +144,7 @@ class CategoryService
                     case 'toggle':
                         /** @var Category $category */
                         foreach ($categories as $category) {
-                            $category->update(['is_active' => !$category->is_active]);
+                            $category->update(['is_active' => ! $category->is_active]);
                         }
                         break;
                 }
@@ -169,9 +173,9 @@ class CategoryService
 
         while (Category::where('slug', $slug)
             ->where('type', $type)
-            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
             ->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;

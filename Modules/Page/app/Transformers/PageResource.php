@@ -2,7 +2,6 @@
 
 namespace Modules\Page\Transformers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PageResource extends JsonResource

@@ -2,11 +2,11 @@
 
 namespace Modules\Auth\Actions\Fortify;
 
-use Modules\Acl\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Modules\Acl\Models\User;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {

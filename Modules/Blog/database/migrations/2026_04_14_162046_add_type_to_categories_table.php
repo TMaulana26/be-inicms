@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('categories', function (Blueprint $table) {
             $table->string('type')->default('post')->after('id')->index();
-            
+
             // Re-evaluate unique constraint for slug to be unique per type
             $table->dropUnique(['slug']);
             $table->unique(['slug', 'type']);

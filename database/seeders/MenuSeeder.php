@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Modules\Menu\Services\MenuService;
-use Modules\Menu\Models\Menu;
 use Illuminate\Database\Seeder;
+use Modules\Menu\Models\Menu;
+use Modules\Menu\Services\MenuService;
 
 class MenuSeeder extends Seeder
 {
@@ -24,11 +24,11 @@ class MenuSeeder extends Seeder
             [
                 'title' => [
                     'en' => 'Home',
-                    'id' => 'Beranda'
+                    'id' => 'Beranda',
                 ],
                 'name' => [
                     'en' => 'Home',
-                    'id' => 'Beranda'
+                    'id' => 'Beranda',
                 ],
                 'icon' => 'Home',
                 'url' => '/home',
@@ -37,11 +37,11 @@ class MenuSeeder extends Seeder
             [
                 'title' => [
                     'en' => 'About Us',
-                    'id' => 'Tentang Kami'
+                    'id' => 'Tentang Kami',
                 ],
                 'name' => [
                     'en' => 'About',
-                    'id' => 'Tentang'
+                    'id' => 'Tentang',
                 ],
                 'icon' => 'Info',
                 'url' => '/about-us',
@@ -50,11 +50,11 @@ class MenuSeeder extends Seeder
             [
                 'title' => [
                     'en' => 'Blog',
-                    'id' => 'Blog'
+                    'id' => 'Blog',
                 ],
                 'name' => [
                     'en' => 'Blog',
-                    'id' => 'Blog'
+                    'id' => 'Blog',
                 ],
                 'icon' => 'FileText',
                 'url' => '/blog',
@@ -63,7 +63,7 @@ class MenuSeeder extends Seeder
                     [
                         'title' => [
                             'en' => 'Categories',
-                            'id' => 'Kategori'
+                            'id' => 'Kategori',
                         ],
                         'url' => '/blog/categories',
                         'order' => 0,
@@ -71,21 +71,21 @@ class MenuSeeder extends Seeder
                     [
                         'title' => [
                             'en' => 'All Posts',
-                            'id' => 'Semua Tulisan'
+                            'id' => 'Semua Tulisan',
                         ],
                         'url' => '/blog/posts',
                         'order' => 1,
                     ],
-                ]
+                ],
             ],
             [
                 'title' => [
                     'en' => 'Admin Panel',
-                    'id' => 'Panel Admin'
+                    'id' => 'Panel Admin',
                 ],
                 'name' => [
                     'en' => 'Admin',
-                    'id' => 'Admin'
+                    'id' => 'Admin',
                 ],
                 'icon' => 'Settings',
                 'url' => '/admin',
@@ -103,7 +103,7 @@ class MenuSeeder extends Seeder
                         'children' => [
                             ['title' => ['en' => 'Pages', 'id' => 'Halaman'], 'url' => '/admin/pages'],
                             ['title' => ['en' => 'Posts', 'id' => 'Postingan'], 'url' => '/admin/posts'],
-                        ]
+                        ],
                     ],
                     [
                         'title' => ['en' => 'System', 'id' => 'Sistem'],
@@ -112,9 +112,9 @@ class MenuSeeder extends Seeder
                         'children' => [
                             ['title' => ['en' => 'Users', 'id' => 'Pengguna'], 'url' => '/admin/users'],
                             ['title' => ['en' => 'Settings', 'id' => 'Pengaturan'], 'url' => '/admin/settings'],
-                        ]
+                        ],
                     ],
-                ]
+                ],
             ],
         ];
 

@@ -3,9 +3,9 @@
 namespace Modules\Blog\Services;
 
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Blog\Models\Post;
-use Illuminate\Support\Facades\DB;
 
 class PostService
 {
@@ -20,6 +20,7 @@ class PostService
         if ($withTrashed) {
             $query->withTrashed();
         }
+
         return $query->findOrFail($id);
     }
 
@@ -34,9 +35,9 @@ class PostService
             $query,
             $params,
             ['title', 'slug', 'summary', 'content'],
-            fn($q) => $q->when($params['category_id'] ?? null, fn($subQ, $catId) => $subQ->where('category_id', $catId))
-                       ->when($params['is_featured'] ?? null, fn($subQ, $isFeatured) => $subQ->where('is_featured', $isFeatured))
-                       ->when($params['status'] ?? null, fn($subQ, $status) => $subQ->where('status', $status))
+            fn ($q) => $q->when($params['category_id'] ?? null, fn ($subQ, $catId) => $subQ->where('category_id', $catId))
+                ->when($params['is_featured'] ?? null, fn ($subQ, $isFeatured) => $subQ->where('is_featured', $isFeatured))
+                ->when($params['status'] ?? null, fn ($subQ, $status) => $subQ->where('status', $status))
         );
     }
 
@@ -49,7 +50,7 @@ class PostService
             $data['slug'] = $this->generateUniqueSlug($data['title']);
             $data['user_id'] = auth()->id();
 
-            if (($data['status'] ?? 'draft') === 'published' && !isset($data['published_at'])) {
+            if (($data['status'] ?? 'draft') === 'published' && ! isset($data['published_at'])) {
                 $data['published_at'] = now();
             }
 
@@ -74,7 +75,7 @@ class PostService
                 $data['slug'] = $this->generateUniqueSlug($data['title'], $post->id);
             }
 
-            if (isset($data['status']) && $data['status'] === 'published' && !$post->published_at) {
+            if (isset($data['status']) && $data['status'] === 'published' && ! $post->published_at) {
                 $data['published_at'] = now();
             }
 
@@ -106,6 +107,7 @@ class PostService
         return DB::transaction(function () use ($id) {
             $post = Post::onlyTrashed()->findOrFail($id);
             $post->restore();
+
             return $post->refresh();
         });
     }
@@ -119,6 +121,7 @@ class PostService
             $post = Post::onlyTrashed()->findOrFail($id);
             $postData = clone $post;
             $post->forceDelete();
+
             return $postData;
         });
     }
@@ -175,8 +178,8 @@ class PostService
         $originalSlug = $slug;
         $count = 1;
 
-        while (Post::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+        while (Post::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;

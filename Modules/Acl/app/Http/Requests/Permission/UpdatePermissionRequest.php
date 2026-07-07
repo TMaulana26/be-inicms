@@ -17,7 +17,7 @@ class UpdatePermissionRequest extends FormRequest
         $id = $permission instanceof \Spatie\Permission\Models\Permission ? $permission->id : $permission;
 
         return [
-            'name' => 'sometimes|string|unique:permissions,name,' . $id,
+            'name' => 'sometimes|string|unique:permissions,name,'.$id,
             'menu' => 'nullable|string|max:255',
         ];
     }

@@ -10,13 +10,6 @@ abstract class Controller
 
     /**
      * Formatting helper for bulk operation responses.
-     *
-     * @param array $result
-     * @param string $action
-     * @param string $resourceClass
-     * @param string $modelName
-     * @param array|null $eagerLoad
-     * @return \Illuminate\Http\JsonResponse
      */
     protected function bulkResponse(array $result, string $action, string $resourceClass, string $modelName, ?array $eagerLoad = null): \Illuminate\Http\JsonResponse
     {
@@ -24,8 +17,8 @@ abstract class Controller
         $failedCount = count($result['failed_ids']);
 
         if ($count === 0 && $failedCount > 0) {
-            return $this->errorResponse("No " . str($modelName)->plural() . " found to be {$action}.", 404, [
-                'not_found_ids' => $result['failed_ids']
+            return $this->errorResponse('No '.str($modelName)->plural()." found to be {$action}.", 404, [
+                'not_found_ids' => $result['failed_ids'],
             ]);
         }
 
@@ -44,7 +37,7 @@ abstract class Controller
 
         return $this->successResponse([
             'affected' => $resourceClass::collection($affected),
-            'failed_ids' => $result['failed_ids']
+            'failed_ids' => $result['failed_ids'],
         ], $message);
     }
 }

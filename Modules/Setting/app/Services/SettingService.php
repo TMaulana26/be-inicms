@@ -2,11 +2,10 @@
 
 namespace Modules\Setting\Services;
 
-use Modules\Setting\Models\Setting;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
-
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Modules\Setting\Models\Setting;
 
 class SettingService
 {
@@ -29,7 +28,7 @@ class SettingService
             Setting::query(),
             $params,
             ['key', 'name'],
-            fn($q) => $q->when($params['group'] ?? null, fn($subQ, $group) => $subQ->where('group', $group)),
+            fn ($q) => $q->when($params['group'] ?? null, fn ($subQ, $group) => $subQ->where('group', $group)),
             15
         );
     }
@@ -95,7 +94,8 @@ class SettingService
     public function toggleStatus(Setting $setting): Setting
     {
         return DB::transaction(function () use ($setting) {
-            $setting->update(['is_active' => !$setting->is_active]);
+            $setting->update(['is_active' => ! $setting->is_active]);
+
             return $setting->refresh();
         });
     }
@@ -108,6 +108,7 @@ class SettingService
         return DB::transaction(function () use ($id) {
             $setting = Setting::onlyTrashed()->findOrFail($id);
             $setting->restore();
+
             return $setting->refresh();
         });
     }
@@ -121,6 +122,7 @@ class SettingService
             $setting = Setting::onlyTrashed()->findOrFail($id);
             $settingData = clone $setting;
             $setting->forceDelete();
+
             return $settingData;
         });
     }
@@ -148,7 +150,7 @@ class SettingService
                     'delete' => Setting::whereIn('id', $foundIds)->delete(),
                     'restore' => Setting::onlyTrashed()->whereIn('id', $foundIds)->restore(),
                     'forceDelete' => Setting::onlyTrashed()->whereIn('id', $foundIds)->forceDelete(),
-                    'toggle' => $settings->each(fn($u) => $u->update(['is_active' => !$u->is_active])),
+                    'toggle' => $settings->each(fn ($u) => $u->update(['is_active' => ! $u->is_active])),
                 };
 
                 if ($operation !== 'forceDelete') {

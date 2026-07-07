@@ -16,10 +16,10 @@ test('authorized user can list categories', function () {
         ->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
-                '*' => ['id', 'name', 'slug', 'description', 'is_active']
+                '*' => ['id', 'name', 'slug', 'description', 'is_active'],
             ],
             'links',
-            'meta'
+            'meta',
         ]);
 });
 

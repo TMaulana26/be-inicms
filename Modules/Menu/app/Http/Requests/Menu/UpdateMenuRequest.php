@@ -19,8 +19,8 @@ class UpdateMenuRequest extends FormRequest
         $menuId = $this->route('menu')?->id;
 
         return [
-            'name' => 'sometimes|required|string|max:255|unique:menus,name,' . $menuId,
-            'slug' => 'sometimes|nullable|string|max:255|unique:menus,slug,' . $menuId,
+            'name' => 'sometimes|required|string|max:255|unique:menus,name,'.$menuId,
+            'slug' => 'sometimes|nullable|string|max:255|unique:menus,slug,'.$menuId,
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'children' => 'nullable|array',

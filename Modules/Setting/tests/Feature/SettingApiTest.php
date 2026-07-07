@@ -1,9 +1,9 @@
 <?php
 
-use Modules\Acl\Models\User;
-use Modules\Setting\Models\Setting;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\Acl\Models\User;
+use Modules\Setting\Models\Setting;
 
 test('guests cannot access setting endpoints', function () {
     $this->getJson('/api/v1/settings')->assertStatus(401);
@@ -27,8 +27,8 @@ test('authorized user can list settings', function () {
             'success',
             'message',
             'data' => [
-                '*' => ['id', 'key', 'name', 'value', 'type', 'group', 'description', 'casted_value']
-            ]
+                '*' => ['id', 'key', 'name', 'value', 'type', 'group', 'description', 'casted_value'],
+            ],
         ]);
 });
 
@@ -59,12 +59,12 @@ test('authorized user can get settings grouped by group', function () {
             'message',
             'data' => [
                 'general' => [
-                    '*' => ['id', 'key', 'name', 'value', 'type', 'group', 'casted_value']
+                    '*' => ['id', 'key', 'name', 'value', 'type', 'group', 'casted_value'],
                 ],
                 'email' => [
-                    '*' => ['id', 'key', 'name', 'value', 'type', 'group', 'casted_value']
-                ]
-            ]
+                    '*' => ['id', 'key', 'name', 'value', 'type', 'group', 'casted_value'],
+                ],
+            ],
         ]);
 });
 
@@ -116,8 +116,8 @@ test('authorized user can bulk update settings', function () {
             [
                 'key' => 'site_logo',
                 'value' => UploadedFile::fake()->image('logo.png'),
-            ]
-        ]
+            ],
+        ],
     ];
 
     $this->actingAs($user, 'sanctum')

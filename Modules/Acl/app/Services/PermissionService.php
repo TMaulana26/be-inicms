@@ -2,10 +2,9 @@
 
 namespace Modules\Acl\Services;
 
-use Modules\Acl\Models\Permission;
-use Illuminate\Support\Facades\DB;
-
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Support\Facades\DB;
+use Modules\Acl\Models\Permission;
 
 class PermissionService
 {
@@ -45,6 +44,7 @@ class PermissionService
     public function update(Permission $permission, array $data): Permission
     {
         $permission->update($data);
+
         return $permission->refresh();
     }
 
@@ -71,7 +71,7 @@ class PermissionService
                     'delete' => Permission::whereIn('id', $foundIds)->delete(),
                     'restore' => Permission::onlyTrashed()->whereIn('id', $foundIds)->restore(),
                     'forceDelete' => Permission::onlyTrashed()->whereIn('id', $foundIds)->forceDelete(),
-                    'toggle' => $permissions->each(fn($p) => $p->update(['is_active' => !$p->is_active])),
+                    'toggle' => $permissions->each(fn ($p) => $p->update(['is_active' => ! $p->is_active])),
                 };
 
                 if ($operation !== 'forceDelete') {
@@ -81,7 +81,7 @@ class PermissionService
 
             return [
                 'affected' => $permissions,
-                'failed_ids' => $failedIds
+                'failed_ids' => $failedIds,
             ];
         });
     }
@@ -91,7 +91,8 @@ class PermissionService
      */
     public function toggleStatus(Permission $permission): Permission
     {
-        $permission->update(['is_active' => !$permission->is_active]);
+        $permission->update(['is_active' => ! $permission->is_active]);
+
         return $permission;
     }
 
@@ -103,6 +104,7 @@ class PermissionService
         return DB::transaction(function () use ($id) {
             $permission = Permission::onlyTrashed()->findOrFail($id);
             $permission->restore();
+
             return $permission->refresh();
         });
     }
@@ -116,6 +118,7 @@ class PermissionService
             $permission = Permission::onlyTrashed()->findOrFail($id);
             $permissionData = clone $permission;
             $permission->forceDelete();
+
             return $permissionData;
         });
     }
@@ -127,6 +130,7 @@ class PermissionService
     {
         return DB::transaction(function () use ($permission, $roles) {
             $permission->syncRoles($roles);
+
             return $permission->refresh();
         });
     }
@@ -138,6 +142,7 @@ class PermissionService
     {
         return DB::transaction(function () use ($permission, $roles) {
             $permission->assignRole($roles);
+
             return $permission->refresh();
         });
     }
@@ -151,6 +156,7 @@ class PermissionService
             foreach ($roles as $role) {
                 $permission->removeRole($role);
             }
+
             return $permission->refresh();
         });
     }

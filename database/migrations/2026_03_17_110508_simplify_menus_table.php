@@ -17,26 +17,26 @@ return new class extends Migration
         // Modify menus table
         Schema::table('menus', function (Blueprint $table) {
             // Check if columns exist before adding (in case of re-run or partial migrations)
-            if (!Schema::hasColumn('menus', 'parent_id')) {
+            if (! Schema::hasColumn('menus', 'parent_id')) {
                 $table->foreignId('parent_id')->nullable()->after('id')->constrained('menus')->onDelete('cascade');
             }
-            if (!Schema::hasColumn('menus', 'title')) {
+            if (! Schema::hasColumn('menus', 'title')) {
                 $table->string('title')->after('parent_id')->nullable();
             }
-            if (!Schema::hasColumn('menus', 'icon')) {
+            if (! Schema::hasColumn('menus', 'icon')) {
                 $table->string('icon')->after('title')->nullable();
             }
-            if (!Schema::hasColumn('menus', 'url')) {
+            if (! Schema::hasColumn('menus', 'url')) {
                 $table->string('url')->after('icon')->nullable();
             }
-            if (!Schema::hasColumn('menus', 'target')) {
+            if (! Schema::hasColumn('menus', 'target')) {
                 $table->string('target')->after('url')->default('_self');
             }
-            if (!Schema::hasColumn('menus', 'order')) {
+            if (! Schema::hasColumn('menus', 'order')) {
                 $table->integer('order')->after('target')->default(0);
             }
-            
-            // name and slug are already there, but we might want to make name nullable 
+
+            // name and slug are already there, but we might want to make name nullable
             // since items might only have title
             $table->string('name')->nullable()->change();
             $table->string('slug')->nullable()->change();

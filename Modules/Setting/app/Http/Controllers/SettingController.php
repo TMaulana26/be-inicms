@@ -3,14 +3,13 @@
 namespace Modules\Setting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Setting\Transformers\SettingResource;
+use App\Traits\HandlesBulkAndSoftDeletes;
+use Illuminate\Http\JsonResponse;
 use Modules\Setting\Http\Requests\Setting\IndexSettingRequest;
 use Modules\Setting\Http\Requests\Setting\UpdateBulkSettingRequest;
-use App\Traits\HandlesBulkAndSoftDeletes;
-use Modules\Setting\Services\SettingService;
 use Modules\Setting\Models\Setting;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Modules\Setting\Services\SettingService;
+use Modules\Setting\Transformers\SettingResource;
 
 class SettingController extends Controller
 {
@@ -20,9 +19,20 @@ class SettingController extends Controller
         protected SettingService $settingService
     ) {}
 
-    protected function getService() { return $this->settingService; }
-    protected function getResourceClass(): string { return SettingResource::class; }
-    protected function getModelName(): string { return 'setting'; }
+    protected function getService()
+    {
+        return $this->settingService;
+    }
+
+    protected function getResourceClass(): string
+    {
+        return SettingResource::class;
+    }
+
+    protected function getModelName(): string
+    {
+        return 'setting';
+    }
 
     /**
      * Display a listing of the settings.

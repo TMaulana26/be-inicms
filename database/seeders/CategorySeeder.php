@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Blog\Models\Category;
-use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
@@ -18,12 +17,12 @@ class CategorySeeder extends Seeder
                 'type' => 'post',
                 'name' => [
                     'en' => 'News',
-                    'id' => 'Berita'
+                    'id' => 'Berita',
                 ],
                 'slug' => 'news',
                 'description' => [
                     'en' => 'Latest project updates and news.',
-                    'id' => 'Pembaruan proyek dan berita terbaru.'
+                    'id' => 'Pembaruan proyek dan berita terbaru.',
                 ],
                 'is_active' => true,
             ],
@@ -31,12 +30,12 @@ class CategorySeeder extends Seeder
                 'type' => 'post',
                 'name' => [
                     'en' => 'Tutorials',
-                    'id' => 'Tutorial'
+                    'id' => 'Tutorial',
                 ],
                 'slug' => 'tutorials',
                 'description' => [
                     'en' => 'Helpful guides and tutorials.',
-                    'id' => 'Panduan dan tutorial bermanfaat.'
+                    'id' => 'Panduan dan tutorial bermanfaat.',
                 ],
                 'is_active' => true,
             ],
@@ -44,12 +43,12 @@ class CategorySeeder extends Seeder
                 'type' => 'post',
                 'name' => [
                     'en' => 'General',
-                    'id' => 'Umum'
+                    'id' => 'Umum',
                 ],
                 'slug' => 'general',
                 'description' => [
                     'en' => 'General discussions and information.',
-                    'id' => 'Diskusi dan informasi umum.'
+                    'id' => 'Diskusi dan informasi umum.',
                 ],
                 'is_active' => true,
             ],

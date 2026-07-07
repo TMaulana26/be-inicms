@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Acl\Models\Role;
 use Modules\Acl\Models\Permission;
+use Modules\Acl\Models\Role;
 
 class RoleAndPermissionSeeder extends Seeder
 {
@@ -20,47 +20,47 @@ class RoleAndPermissionSeeder extends Seeder
         $permissions = [
             'view users' => [
                 'menu' => 'User',
-                'display_name' => ['en' => 'View Users', 'id' => 'Lihat Pengguna']
+                'display_name' => ['en' => 'View Users', 'id' => 'Lihat Pengguna'],
             ],
             'create users' => [
                 'menu' => 'User',
-                'display_name' => ['en' => 'Create Users', 'id' => 'Tambah Pengguna']
+                'display_name' => ['en' => 'Create Users', 'id' => 'Tambah Pengguna'],
             ],
             'edit users' => [
                 'menu' => 'User',
-                'display_name' => ['en' => 'Edit Users', 'id' => 'Ubah Pengguna']
+                'display_name' => ['en' => 'Edit Users', 'id' => 'Ubah Pengguna'],
             ],
             'delete users' => [
                 'menu' => 'User',
-                'display_name' => ['en' => 'Delete Users', 'id' => 'Hapus Pengguna']
+                'display_name' => ['en' => 'Delete Users', 'id' => 'Hapus Pengguna'],
             ],
             'view roles' => [
                 'menu' => 'Role',
-                'display_name' => ['en' => 'View Roles', 'id' => 'Lihat Peran']
+                'display_name' => ['en' => 'View Roles', 'id' => 'Lihat Peran'],
             ],
             'manage roles' => [
                 'menu' => 'Role',
-                'display_name' => ['en' => 'Manage Roles', 'id' => 'Kelola Peran']
+                'display_name' => ['en' => 'Manage Roles', 'id' => 'Kelola Peran'],
             ],
             'view permissions' => [
                 'menu' => 'Permission',
-                'display_name' => ['en' => 'View Permissions', 'id' => 'Lihat Izin']
+                'display_name' => ['en' => 'View Permissions', 'id' => 'Lihat Izin'],
             ],
             'manage permissions' => [
                 'menu' => 'Permission',
-                'display_name' => ['en' => 'Manage Permissions', 'id' => 'Kelola Izin']
+                'display_name' => ['en' => 'Manage Permissions', 'id' => 'Kelola Izin'],
             ],
             'view media' => [
                 'menu' => 'Media',
-                'display_name' => ['en' => 'View Media', 'id' => 'Lihat Media']
+                'display_name' => ['en' => 'View Media', 'id' => 'Lihat Media'],
             ],
             'upload media' => [
                 'menu' => 'Media',
-                'display_name' => ['en' => 'Upload Media', 'id' => 'Unggah Media']
+                'display_name' => ['en' => 'Upload Media', 'id' => 'Unggah Media'],
             ],
             'delete media' => [
                 'menu' => 'Media',
-                'display_name' => ['en' => 'Delete Media', 'id' => 'Hapus Media']
+                'display_name' => ['en' => 'Delete Media', 'id' => 'Hapus Media'],
             ],
         ];
 
@@ -70,7 +70,7 @@ class RoleAndPermissionSeeder extends Seeder
                 ['name' => $name],
                 [
                     'menu' => $data['menu'],
-                    'display_name' => $data['display_name']
+                    'display_name' => $data['display_name'],
                 ]
             );
         }
@@ -79,19 +79,19 @@ class RoleAndPermissionSeeder extends Seeder
         $roles = [
             'super-admin' => [
                 'en' => 'Super Admin',
-                'id' => 'Administrator Utama'
+                'id' => 'Administrator Utama',
             ],
             'admin' => [
                 'en' => 'Administrator',
-                'id' => 'Administrator'
+                'id' => 'Administrator',
             ],
             'editor' => [
                 'en' => 'Editor',
-                'id' => 'Editor'
+                'id' => 'Editor',
             ],
             'user' => [
                 'en' => 'Standard User',
-                'id' => 'Pengguna Biasa'
+                'id' => 'Pengguna Biasa',
             ],
         ];
 

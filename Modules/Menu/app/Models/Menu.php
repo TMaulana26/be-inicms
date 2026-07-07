@@ -2,17 +2,16 @@
 
 namespace Modules\Menu\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasActiveStatus;
-
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 
 class Menu extends Model
 {
-    use SoftDeletes, HasActiveStatus, HasTranslations;
+    use HasActiveStatus, HasTranslations, SoftDeletes;
 
     public $translatable = ['name', 'title', 'description'];
 

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Acl\Http\Controllers\UserController;
-use Modules\Acl\Http\Controllers\RoleController;
 use Modules\Acl\Http\Controllers\PermissionController;
+use Modules\Acl\Http\Controllers\RoleController;
+use Modules\Acl\Http\Controllers\UserController;
 
 Route::middleware('auth:sanctum')->group(function () {
     // Users

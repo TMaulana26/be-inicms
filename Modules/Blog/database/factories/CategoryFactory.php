@@ -17,6 +17,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $name = $this->faker->unique()->word();
+
         return [
             'name' => $this->faker->sentence(2),
             'slug' => \Illuminate\Support\Str::slug($name),

@@ -2,12 +2,11 @@
 
 namespace Modules\Media\Services;
 
-use Modules\Acl\Models\User;
-use Illuminate\Http\UploadedFile;
-use Modules\Media\Models\Media;
-use Illuminate\Support\Facades\DB;
-
 use App\Traits\HandlesIndexQuery;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Modules\Acl\Models\User;
+use Modules\Media\Models\Media;
 
 class MediaService
 {
@@ -22,9 +21,9 @@ class MediaService
             Media::query(),
             $params,
             ['name', 'file_name'],
-            fn($q) => $q->when(($params['trashed'] ?? null) !== 'only' && ($params['trashed'] ?? null) !== 'with', function ($subQ) use ($params) {
+            fn ($q) => $q->when(($params['trashed'] ?? null) !== 'only' && ($params['trashed'] ?? null) !== 'with', function ($subQ) use ($params) {
                 $subQ->where('collection_name', ($params['only_profile_picture'] ?? false) ? '=' : '!=', 'profile_picture');
-            })->when($params['category_id'] ?? null, fn($q) => $q->where('category_id', $params['category_id'])),
+            })->when($params['category_id'] ?? null, fn ($q) => $q->where('category_id', $params['category_id'])),
             24
         );
     }
@@ -62,6 +61,7 @@ class MediaService
     public function update(Media $media, array $data): Media
     {
         $media->update($data);
+
         return $media->refresh();
     }
 
@@ -88,7 +88,7 @@ class MediaService
                     'delete' => Media::whereIn('id', $foundIds)->delete(),
                     'restore' => Media::onlyTrashed()->whereIn('id', $foundIds)->restore(),
                     'forceDelete' => Media::onlyTrashed()->whereIn('id', $foundIds)->forceDelete(),
-                    'toggle' => $mediaItems->each(fn($m) => $m->update(['is_active' => !$m->is_active])),
+                    'toggle' => $mediaItems->each(fn ($m) => $m->update(['is_active' => ! $m->is_active])),
                 };
 
                 if ($operation !== 'forceDelete') {
@@ -98,7 +98,7 @@ class MediaService
 
             return [
                 'affected' => $mediaItems,
-                'failed_ids' => $failedIds
+                'failed_ids' => $failedIds,
             ];
         });
     }
@@ -108,7 +108,8 @@ class MediaService
      */
     public function toggleStatus(Media $media): Media
     {
-        $media->update(['is_active' => !$media->is_active]);
+        $media->update(['is_active' => ! $media->is_active]);
+
         return $media;
     }
 
@@ -120,6 +121,7 @@ class MediaService
         return DB::transaction(function () use ($id) {
             $media = Media::onlyTrashed()->findOrFail($id);
             $media->restore();
+
             return $media->refresh();
         });
     }
@@ -133,6 +135,7 @@ class MediaService
             $media = Media::onlyTrashed()->findOrFail($id);
             $mediaData = clone $media;
             $media->forceDelete();
+
             return $mediaData;
         });
     }

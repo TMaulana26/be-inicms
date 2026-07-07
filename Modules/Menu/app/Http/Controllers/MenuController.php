@@ -3,14 +3,14 @@
 namespace Modules\Menu\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Menu\Transformers\MenuResource;
+use App\Traits\HandlesBulkAndSoftDeletes;
+use Illuminate\Http\JsonResponse;
 use Modules\Menu\Http\Requests\Menu\IndexMenuRequest;
 use Modules\Menu\Http\Requests\Menu\StoreMenuRequest;
 use Modules\Menu\Http\Requests\Menu\UpdateMenuRequest;
-use App\Traits\HandlesBulkAndSoftDeletes;
-use Modules\Menu\Services\MenuService;
 use Modules\Menu\Models\Menu;
-use Illuminate\Http\JsonResponse;
+use Modules\Menu\Services\MenuService;
+use Modules\Menu\Transformers\MenuResource;
 
 class MenuController extends Controller
 {
@@ -20,10 +20,25 @@ class MenuController extends Controller
         protected MenuService $menuService
     ) {}
 
-    protected function getService() { return $this->menuService; }
-    protected function getResourceClass(): string { return MenuResource::class; }
-    protected function getModelName(): string { return 'menu'; }
-    protected function getEagerLoadRelations(): array { return ['children']; }
+    protected function getService()
+    {
+        return $this->menuService;
+    }
+
+    protected function getResourceClass(): string
+    {
+        return MenuResource::class;
+    }
+
+    protected function getModelName(): string
+    {
+        return 'menu';
+    }
+
+    protected function getEagerLoadRelations(): array
+    {
+        return ['children'];
+    }
 
     /**
      * Display a listing of the resource.

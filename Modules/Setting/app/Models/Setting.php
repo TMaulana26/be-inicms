@@ -2,18 +2,17 @@
 
 namespace Modules\Setting\Models;
 
+use App\Traits\HasActiveStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\HasActiveStatus;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-
 use Spatie\Translatable\HasTranslations;
 
 class Setting extends Model implements HasMedia
 {
-    use InteractsWithMedia, SoftDeletes, HasActiveStatus, HasTranslations;
+    use HasActiveStatus, HasTranslations, InteractsWithMedia, SoftDeletes;
 
     public $translatable = ['value', 'description'];
 

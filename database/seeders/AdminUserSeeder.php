@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Acl\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
+use Modules\Acl\Models\User;
 
 class AdminUserSeeder extends Seeder
 {
@@ -19,25 +18,11 @@ class AdminUserSeeder extends Seeder
             ['email' => 'inicmsadmin@yopmail.com'],
             [
                 'name' => 'Super Administrator',
-                'password' => '123456789', // Will be hashed automatically by Eloquent casts
+                'password' => env('ADMIN_PASSWORD', 'InICMS@2026_SecureAdmin!'), // Configurable secure password
                 'email_verified_at' => Carbon::now(),
                 'is_active' => true,
             ]
         );
         $superAdmin->assignRole('super-admin');
-
-        // 2. Create 10 dummy users ranging from inicmsuser1@yopmail.com to inicmsuser10@yopmail.com
-        for ($i = 1; $i <= 10; $i++) {
-            $dummy = User::firstOrCreate(
-                ['email' => "inicmsuser{$i}@yopmail.com"],
-                [
-                    'name' => "Dummy User {$i}",
-                    'password' => '987654321',
-                    'email_verified_at' => Carbon::now(),
-                    'is_active' => true,
-                ]
-            );
-            $dummy->assignRole('user');
-        }
     }
 }

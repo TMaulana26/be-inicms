@@ -21,7 +21,7 @@ class PermissionResource extends JsonResource
             'menu' => $this->menu,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
-            'roles' => $this->whenLoaded('roles', fn() => $this->roles->map(fn($role) => [
+            'roles' => $this->whenLoaded('roles', fn () => $this->roles->map(fn ($role) => [
                 'id' => $role->id,
                 'name' => $role->name,
                 'display_name' => $role->display_name,

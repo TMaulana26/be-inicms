@@ -3,16 +3,15 @@
 namespace Modules\Acl\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
-use Modules\Acl\Models\User;
-use Modules\Acl\Http\Requests\User\StoreUserRequest;
-use Modules\Acl\Http\Requests\User\UpdateUserRequest;
-use Modules\Acl\Http\Requests\User\IndexUserRequest;
-use Modules\Acl\Http\Requests\User\AssignRoleRequest;
-use Modules\Acl\Transformers\UserResource;
-use Modules\Acl\Services\UserService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
+use Modules\Acl\Http\Requests\User\AssignRoleRequest;
+use Modules\Acl\Http\Requests\User\IndexUserRequest;
+use Modules\Acl\Http\Requests\User\StoreUserRequest;
+use Modules\Acl\Http\Requests\User\UpdateUserRequest;
+use Modules\Acl\Models\User;
+use Modules\Acl\Services\UserService;
+use Modules\Acl\Transformers\UserResource;
 
 class UserController extends Controller
 {

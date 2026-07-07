@@ -1,9 +1,9 @@
 <?php
 
-use Modules\Acl\Models\User;
-use Modules\Page\Models\Page;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\Acl\Models\User;
+use Modules\Page\Models\Page;
 
 test('guests cannot access page endpoints', function () {
     $this->getJson('/api/v1/pages')->assertStatus(401);
@@ -18,10 +18,10 @@ test('authorized user can list pages', function () {
         ->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
-                '*' => ['id', 'author', 'title', 'slug', 'content', 'status', 'page_image']
+                '*' => ['id', 'author', 'title', 'slug', 'content', 'status', 'page_image'],
             ],
             'links',
-            'meta'
+            'meta',
         ]);
 });
 

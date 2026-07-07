@@ -1,13 +1,13 @@
 <?php
 
-use Modules\Acl\Models\User;
-use Modules\Acl\Models\Role;
 use Modules\Acl\Models\Permission;
-use Modules\Media\Models\Media;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Models\User;
 use Modules\Blog\Models\Category;
 use Modules\Blog\Models\Post;
-use Modules\Page\Models\Page;
+use Modules\Media\Models\Media;
 use Modules\Menu\Models\Menu;
+use Modules\Page\Models\Page;
 use Modules\Setting\Models\Setting;
 
 test('guests cannot access stats endpoint', function () {

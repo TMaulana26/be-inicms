@@ -3,9 +3,9 @@
 namespace Modules\Dashboard\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Dashboard\Transformers\StatsResource;
-use Modules\Dashboard\Services\StatsService;
 use Illuminate\Http\JsonResponse;
+use Modules\Dashboard\Services\StatsService;
+use Modules\Dashboard\Transformers\StatsResource;
 
 class StatsController extends Controller
 {

@@ -3,16 +3,15 @@
 namespace Modules\Acl\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
-use Modules\Acl\Models\Permission;
-use Modules\Acl\Http\Requests\Permission\StorePermissionRequest;
-use Modules\Acl\Http\Requests\Permission\UpdatePermissionRequest;
-use Modules\Acl\Http\Requests\Permission\IndexPermissionRequest;
-use Modules\Acl\Http\Requests\Permission\AssignRoleRequest;
-use Modules\Acl\Transformers\PermissionResource;
-use Modules\Acl\Services\PermissionService;
 use App\Traits\HandlesBulkAndSoftDeletes;
 use Illuminate\Http\JsonResponse;
+use Modules\Acl\Http\Requests\Permission\AssignRoleRequest;
+use Modules\Acl\Http\Requests\Permission\IndexPermissionRequest;
+use Modules\Acl\Http\Requests\Permission\StorePermissionRequest;
+use Modules\Acl\Http\Requests\Permission\UpdatePermissionRequest;
+use Modules\Acl\Models\Permission;
+use Modules\Acl\Services\PermissionService;
+use Modules\Acl\Transformers\PermissionResource;
 
 class PermissionController extends Controller
 {

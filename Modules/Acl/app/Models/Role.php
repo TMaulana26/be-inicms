@@ -2,15 +2,14 @@
 
 namespace Modules\Acl\Models;
 
-use Spatie\Permission\Models\Role as SpatieRole;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasActiveStatus;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Role as SpatieRole;
 use Spatie\Translatable\HasTranslations;
 
 class Role extends SpatieRole
 {
-    use SoftDeletes, HasActiveStatus, HasTranslations;
+    use HasActiveStatus, HasTranslations, SoftDeletes;
 
     public $translatable = ['display_name'];
 

@@ -17,7 +17,7 @@ class UpdateRoleRequest extends FormRequest
         $id = $role instanceof \Spatie\Permission\Models\Role ? $role->id : $role;
 
         return [
-            'name' => 'sometimes|string|unique:roles,name,' . $id,
+            'name' => 'sometimes|string|unique:roles,name,'.$id,
             'permissions' => 'array|nullable',
             'permissions.*' => 'exists:permissions,name',
         ];

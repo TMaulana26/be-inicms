@@ -1,8 +1,8 @@
 <?php
 
-use Modules\Acl\Models\User;
-use Modules\Acl\Models\Role;
 use Modules\Acl\Models\Permission;
+use Modules\Acl\Models\Role;
+use Modules\Acl\Models\User;
 
 test('guests cannot access roles list', function () {
     $this->getJson('/api/v1/roles')->assertStatus(401);
@@ -19,8 +19,8 @@ test('authorized user can list roles', function () {
             'success',
             'message',
             'data' => [
-                '*' => ['id', 'name', 'display_name', 'is_active', 'permissions']
-            ]
+                '*' => ['id', 'name', 'display_name', 'is_active', 'permissions'],
+            ],
         ]);
 });
 
@@ -153,7 +153,7 @@ test('authorized user can perform bulk toggle status on roles', function () {
 test('authorized user can manage role permissions', function () {
     $user = User::factory()->create();
     $role = Role::create(['name' => 'moderator', 'display_name' => ['en' => 'Moderator']]);
-    
+
     $permission1 = Permission::create(['name' => 'edit-posts', 'display_name' => ['en' => 'Edit Posts']]);
     $permission2 = Permission::create(['name' => 'delete-posts', 'display_name' => ['en' => 'Delete Posts']]);
 

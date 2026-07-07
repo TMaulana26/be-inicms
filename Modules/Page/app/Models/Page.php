@@ -2,19 +2,18 @@
 
 namespace Modules\Page\Models;
 
-use Modules\Acl\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Acl\Models\User;
 use Modules\Page\Database\Factories\PageFactory;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
 use Spatie\Translatable\HasTranslations;
 
 class Page extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia, HasTranslations;
+    use HasFactory, HasTranslations, InteractsWithMedia, SoftDeletes;
 
     public $translatable = ['title', 'content'];
 

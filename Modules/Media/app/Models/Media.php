@@ -2,13 +2,13 @@
 
 namespace Modules\Media\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasActiveStatus;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\MediaCollections\Models\Media as BaseMedia;
 
 class Media extends BaseMedia
 {
-    use SoftDeletes, HasActiveStatus;
+    use HasActiveStatus, SoftDeletes;
 
     protected $guarded = [];
 

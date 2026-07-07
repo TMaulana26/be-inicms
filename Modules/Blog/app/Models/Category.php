@@ -3,16 +3,15 @@
 namespace Modules\Blog\Models;
 
 use App\Traits\HasActiveStatus;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Blog\Database\Factories\CategoryFactory;
-
 use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
 {
-    use HasFactory, SoftDeletes, HasActiveStatus, HasTranslations;
+    use HasActiveStatus, HasFactory, HasTranslations, SoftDeletes;
 
     public $translatable = ['name', 'description'];
 
@@ -28,6 +27,7 @@ class Category extends Model
     ];
 
     public const TYPE_POST = 'post';
+
     public const TYPE_MEDIA = 'media';
 
     /**

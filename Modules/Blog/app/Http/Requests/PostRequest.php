@@ -28,7 +28,7 @@ class PostRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                $id ? 'unique:posts,title,' . $id : 'unique:posts,title',
+                $id ? 'unique:posts,title,'.$id : 'unique:posts,title',
             ],
             'summary' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],

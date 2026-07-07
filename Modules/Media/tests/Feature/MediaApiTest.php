@@ -1,9 +1,9 @@
 <?php
 
-use Modules\Acl\Models\User;
-use Modules\Media\Models\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\Acl\Models\User;
+use Modules\Media\Models\Media;
 
 test('guests cannot access media endpoints', function () {
     $this->getJson('/api/v1/media')->assertStatus(401);
@@ -35,10 +35,10 @@ test('authorized user can list media', function () {
             'success',
             'message',
             'data' => [
-                '*' => ['id', 'file_name', 'name', 'mime_type', 'size', 'collection_name', 'is_active', 'category_id']
+                '*' => ['id', 'file_name', 'name', 'mime_type', 'size', 'collection_name', 'is_active', 'category_id'],
             ],
             'links',
-            'meta'
+            'meta',
         ]);
 });
 

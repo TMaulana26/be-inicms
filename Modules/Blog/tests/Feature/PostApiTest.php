@@ -18,10 +18,10 @@ test('authorized user can list posts', function () {
         ->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
-                '*' => ['id', 'title', 'slug', 'summary', 'content', 'status', 'is_featured', 'category', 'author']
+                '*' => ['id', 'title', 'slug', 'summary', 'content', 'status', 'is_featured', 'category', 'author'],
             ],
             'links',
-            'meta'
+            'meta',
         ]);
 });
 
