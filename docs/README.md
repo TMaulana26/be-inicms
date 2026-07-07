@@ -33,6 +33,12 @@ Guides for specific CMS features and resources.
 - **[System Settings](./SETTING_GUIDE.md)**: Application-wide configuration and grouped settings.
 - **[Dashboard Stats](./STATS_GUIDE.md)**: Retrieval of system-wide reporting counts.
 
+## 🧪 Testing
+
+Guides for writing module-level feature tests.
+
+- **[Module Testing Guide](./MODULE_TESTING_GUIDE.md)**: How to write Pest feature tests for new modules, including auth, CRUD, soft deletes, bulk actions, and relationship endpoints.
+
 ---
 
 > [!TIP]
