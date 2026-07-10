@@ -7,5 +7,6 @@
     "Media": true,
     "Dashboard": true,
     "Blog": true,
-    "Page": true
+    "Page": true,
+    "Contact": true
 }

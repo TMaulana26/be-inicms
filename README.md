@@ -62,6 +62,7 @@ The docs in [docs/](docs) are the source of truth for feature behavior and API f
 - [Page Module Guide](docs/PAGE_GUIDE.md)
 - [Menu Guide](docs/MENU_GUIDE.md)
 - [Settings Guide](docs/SETTING_GUIDE.md)
+- [Contact Module Guide](docs/CONTACT_GUIDE.md)
 - [Indexing & Queries Guide](docs/INDEX_QUERY_GUIDE.md)
 - [Localization Guide](docs/LOCALIZATION_GUIDE.md)
 

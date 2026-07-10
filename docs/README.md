@@ -32,6 +32,7 @@ Guides for specific CMS features and resources.
 - **[Navigation Menus](./MENU_GUIDE.md)**: Managing recursive, self-referencing menu structures.
 - **[System Settings](./SETTING_GUIDE.md)**: Application-wide configuration and grouped settings.
 - **[Dashboard Stats](./STATS_GUIDE.md)**: Retrieval of system-wide reporting counts.
+- **[Contact Module](./CONTACT_GUIDE.md)**: Managing consumer contact submissions and read status tracking.
 
 ## 🧪 Testing
 

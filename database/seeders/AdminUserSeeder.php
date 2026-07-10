@@ -18,7 +18,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'inicmsadmin@yopmail.com'],
             [
                 'name' => 'Super Administrator',
-                'password' => env('ADMIN_PASSWORD', 'InICMS@2026_SecureAdmin!'), // Configurable secure password
+                'password' => env('ADMIN_PASSWORD', 'InICMS@2026_SecureAdmin!'),
                 'email_verified_at' => Carbon::now(),
                 'is_active' => true,
             ]
