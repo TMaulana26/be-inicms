@@ -34,6 +34,7 @@ Guides for specific CMS features and resources.
 - **[Dashboard Stats](./STATS_GUIDE.md)**: Retrieval of system-wide reporting counts.
 - **[Contact Module](./CONTACT_GUIDE.md)**: Managing consumer contact submissions and read status tracking.
 - **[Portfolio Module](./PORTFOLIO_GUIDE.md)**: Showcasing projects, tech stacks, and screenshot images.
+- **[Skill Module](./SKILL_GUIDE.md)**: Managing categorized technical skills (badges) for portfolio page integration.
 
 ## 🧪 Testing
 
@@ -84,4 +85,13 @@ Consumer messages and inquiries management.
 ### System Stats
 Dashboard counts and statistics.
 - `GET /api/v1/stats`
+
+### Portfolio & Skills
+Portfolio projects showcases and technical skills badges.
+- `GET /api/v1/projects` (Public list of active projects)
+- `GET /api/v1/projects/{id}` (Public details of a project)
+- `GET /api/skills` (Public flat list of active skills)
+- `GET /api/v1/skills` (Protected skills listing, requires authentication)
+- `POST /api/v1/skills` (Create new skill, requires authentication)
+
 

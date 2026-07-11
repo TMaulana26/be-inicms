@@ -4,13 +4,14 @@ INI CMS Backend is a modern, modular, and extensible headless CMS API built with
 
 ## Key Features
 
-- **Modular Architecture**: Features are organized into discrete, maintainable domain modules (e.g., Blog, Auth, Acl, Setting, Menu, Media, Contact) using `nwidart/laravel-modules`.
+- **Modular Architecture**: Features are organized into discrete, maintainable domain modules (e.g., Blog, Auth, Acl, Setting, Menu, Media, Contact, Portfolio, Skill) using `nwidart/laravel-modules`.
 - **Authentication & Security**: Secure, token-based authentication via Laravel Sanctum, integrated with Two-Factor Authentication (2FA), secure password resets, and email verification.
 - **Role-Based Access Control (RBAC)**: Fine-grained access control (Users, Roles, Permissions) powered by Spatie Laravel Permission.
 - **Content Management**: Built-in modules for managing static pages, blogging (categories and posts), and recursive navigation menus.
 - **Media Library**: Dynamic file uploads, conversions, and optimized image processing using Spatie Laravel Medialibrary.
 - **Global Settings & Stats**: Application-wide key-value configuration and real-time database dashboard reporting counts.
 - **Consumer Messages**: Storing and managing visitor contact requests with status and read/unread tracking.
+- **Portfolio & Skills**: Modules for managing projects (screenshots, tech stacks, repository and demo URLs) and technical skills (Frontend, Backend, Tools) for badges display.
 
 ## Built With
 
