@@ -8,5 +8,6 @@
     "Dashboard": true,
     "Blog": true,
     "Page": true,
-    "Contact": true
+    "Contact": true,
+    "Portfolio": true
 }

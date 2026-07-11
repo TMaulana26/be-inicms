@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Contact\Http\Controllers\ContactController;
+use Modules\Contact\Http\Controllers\ContactMessageController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('contacts', ContactController::class)->names('contact');
+    Route::resource('contact-messages', ContactMessageController::class)->names('contact-messages');
 });

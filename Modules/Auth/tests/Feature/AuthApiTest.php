@@ -151,3 +151,35 @@ test('guest cannot logout', function () {
     $this->postJson('/api/v1/auth/logout')
         ->assertStatus(401);
 });
+
+test('guest can request password reset link', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+
+    $user = User::factory()->create(['email' => 'reset@example.com']);
+
+    $this->postJson('/api/v1/auth/forgot-password', ['email' => 'reset@example.com'])
+        ->assertStatus(200)
+        ->assertJsonPath('success', true);
+});
+
+test('guest can reset password using token', function () {
+    $user = User::factory()->create([
+        'email' => 'resetme@example.com',
+        'password' => Hash::make('oldpassword'),
+    ]);
+
+    $token = \Illuminate\Support\Facades\Password::createToken($user);
+
+    $payload = [
+        'email' => 'resetme@example.com',
+        'password' => 'newpassword123',
+        'password_confirmation' => 'newpassword123',
+        'token' => $token,
+    ];
+
+    $this->postJson('/api/v1/auth/reset-password', $payload)
+        ->assertStatus(200)
+        ->assertJsonPath('success', true);
+
+    $this->assertTrue(Hash::check('newpassword123', $user->fresh()->password));
+});

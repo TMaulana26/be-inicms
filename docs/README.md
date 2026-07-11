@@ -33,6 +33,7 @@ Guides for specific CMS features and resources.
 - **[System Settings](./SETTING_GUIDE.md)**: Application-wide configuration and grouped settings.
 - **[Dashboard Stats](./STATS_GUIDE.md)**: Retrieval of system-wide reporting counts.
 - **[Contact Module](./CONTACT_GUIDE.md)**: Managing consumer contact submissions and read status tracking.
+- **[Portfolio Module](./PORTFOLIO_GUIDE.md)**: Showcasing projects, tech stacks, and screenshot images.
 
 ## 🧪 Testing
 
@@ -44,3 +45,43 @@ Guides for writing module-level feature tests.
 
 > [!TIP]
 > All API endpoints are prefixed with `/api/v1` and require an `Accept: application/json` header. Most endpoints (except Login/Register) also require a valid `Authorization: Bearer <token>` header.
+
+---
+
+## 🔗 API Overview
+
+All API endpoints are prefixed with `/api/v1` and expect `Accept: application/json`. Most endpoints require `Authorization: Bearer <token>`, except public auth endpoints like login, register, and public contact submissions.
+
+### Authentication
+The auth flow is token-based via Sanctum. Email verification, 2FA, and password resets are handled in the Auth module.
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/logout`
+- `GET /api/v1/auth/user`
+- `POST /api/v1/auth/forgot-password`
+- `POST /api/v1/auth/reset-password`
+
+### RBAC (Access Control)
+Roles, permissions, and users are managed through API resources plus bulk and relationship endpoints.
+- Users: `/api/v1/users`
+- Roles: `/api/v1/roles`
+- Permissions: `/api/v1/permissions`
+
+### Media Library
+Media uploads and lifecycle management are exposed through the Media module.
+- `GET /api/v1/media`
+- `POST /api/v1/media`
+- `PATCH /api/v1/media/{id}/restore`
+- `PATCH /api/v1/media/{id}/toggle-status`
+- `DELETE /api/v1/media/{id}/force`
+
+### Contact Messages
+Consumer messages and inquiries management.
+- `POST /api/v1/contact-messages` (Public submission)
+- `GET /api/v1/contact-messages` (Protected listing)
+- `PATCH /api/v1/contact-messages/{id}/toggle-read` (Protected read/unread toggle)
+
+### System Stats
+Dashboard counts and statistics.
+- `GET /api/v1/stats`
+
