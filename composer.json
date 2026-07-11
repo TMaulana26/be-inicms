@@ -52,6 +52,9 @@
             "Modules\\Page\\": "Modules/Page/app/",
             "Modules\\Page\\Database\\Factories\\": "Modules/Page/database/factories/",
             "Modules\\Page\\Database\\Seeders\\": "Modules/Page/database/seeders/",
+            "Modules\\Skill\\": "Modules/Skill/app/",
+            "Modules\\Skill\\Database\\Factories\\": "Modules/Skill/database/factories/",
+            "Modules\\Skill\\Database\\Seeders\\": "Modules/Skill/database/seeders/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

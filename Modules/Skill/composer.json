@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/skill",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Skill\\": "app/",
+            "Modules\\Skill\\Database\\Factories\\": "database/factories/",
+            "Modules\\Skill\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Skill\\Tests\\": "tests/"
+        }
+    }
+}

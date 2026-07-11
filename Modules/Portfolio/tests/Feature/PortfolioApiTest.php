@@ -73,6 +73,7 @@ test('authorized user can create project with screenshot', function () {
         ->assertJsonPath('data.title.id', 'Proyek Tes ID')
         ->assertJsonPath('data.slug', 'test-project-en');
 
+    /** @var Project $project */
     $project = Project::latest()->first();
     $this->assertNotNull($project->getFirstMedia('screenshot'));
     $this->assertNotNull($response->json('data.screenshot_url'));

@@ -9,5 +9,6 @@
     "Blog": true,
     "Page": true,
     "Contact": true,
-    "Portfolio": true
+    "Portfolio": true,
+    "Skill": true
 }
