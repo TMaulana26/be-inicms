@@ -5,7 +5,6 @@ namespace Modules\Dashboard\Services;
 use Modules\Acl\Models\Permission;
 use Modules\Acl\Models\Role;
 use Modules\Acl\Models\User;
-use Modules\Media\Models\Media;
 
 class StatsService
 {
@@ -34,34 +33,16 @@ class StatsService
                 'deleted' => Permission::onlyTrashed()->count(),
             ],
             'media' => [
-                'all' => Media::count(),
-                'active' => Media::where('is_active', true)->count(),
-                'inactive' => Media::where('is_active', false)->count(),
-                'deleted' => Media::onlyTrashed()->count(),
-            ],
-            'categories' => [
-                'all' => \Modules\Blog\Models\Category::count(),
-                'active' => \Modules\Blog\Models\Category::where('is_active', true)->count(),
-                'inactive' => \Modules\Blog\Models\Category::where('is_active', false)->count(),
-                'deleted' => \Modules\Blog\Models\Category::onlyTrashed()->count(),
-            ],
-            'posts' => [
-                'all' => \Modules\Blog\Models\Post::count(),
-                'published' => \Modules\Blog\Models\Post::where('status', 'published')->count(),
-                'draft' => \Modules\Blog\Models\Post::where('status', 'draft')->count(),
-                'deleted' => \Modules\Blog\Models\Post::onlyTrashed()->count(),
+                'all' => \Illuminate\Support\Facades\DB::table('media')->whereNull('deleted_at')->count(),
+                'active' => \Illuminate\Support\Facades\DB::table('media')->whereNull('deleted_at')->where('is_active', true)->count(),
+                'inactive' => \Illuminate\Support\Facades\DB::table('media')->whereNull('deleted_at')->where('is_active', false)->count(),
+                'deleted' => \Illuminate\Support\Facades\DB::table('media')->whereNotNull('deleted_at')->count(),
             ],
             'pages' => [
                 'all' => \Modules\Page\Models\Page::count(),
                 'published' => \Modules\Page\Models\Page::where('status', 'published')->count(),
                 'draft' => \Modules\Page\Models\Page::where('status', 'draft')->count(),
                 'deleted' => \Modules\Page\Models\Page::onlyTrashed()->count(),
-            ],
-            'menus' => [
-                'all' => \Modules\Menu\Models\Menu::count(),
-                'active' => \Modules\Menu\Models\Menu::where('is_active', true)->count(),
-                'inactive' => \Modules\Menu\Models\Menu::where('is_active', false)->count(),
-                'deleted' => \Modules\Menu\Models\Menu::onlyTrashed()->count(),
             ],
             'settings' => [
                 'all' => \Modules\Setting\Models\Setting::count(),

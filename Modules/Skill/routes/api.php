@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Skill\Http\Controllers\SkillController;
 
+// Public Routes
+Route::get('skills', [SkillController::class, 'index'])->name('skills.index');
+Route::get('skills/{skill}', [SkillController::class, 'show'])->name('skills.show');
+
 // Protected Routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(SkillController::class)->prefix('skills')->group(function () {
@@ -20,5 +24,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::patch('{id}/toggle-status', 'toggleStatus')->name('skills.toggle-status');
     });
 
-    Route::apiResource('skills', SkillController::class);
+    Route::apiResource('skills', SkillController::class)->except(['index', 'show']);
 });

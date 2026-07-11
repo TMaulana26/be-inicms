@@ -3,10 +3,6 @@
 use Modules\Acl\Models\Permission;
 use Modules\Acl\Models\Role;
 use Modules\Acl\Models\User;
-use Modules\Blog\Models\Category;
-use Modules\Blog\Models\Post;
-use Modules\Media\Models\Media;
-use Modules\Menu\Models\Menu;
 use Modules\Page\Models\Page;
 use Modules\Setting\Models\Setting;
 
@@ -39,7 +35,7 @@ test('authorized user can retrieve dashboard statistics', function () {
     $deletedPermission->delete();
 
     // Media
-    Media::create([
+    Illuminate\Support\Facades\DB::table('media')->insert([
         'model_type' => User::class,
         'model_id' => $user->id,
         'collection_name' => 'avatar',
@@ -47,13 +43,15 @@ test('authorized user can retrieve dashboard statistics', function () {
         'file_name' => 'avatar.png',
         'disk' => 'public',
         'size' => 500,
-        'manipulations' => [],
-        'custom_properties' => [],
-        'generated_conversions' => [],
-        'responsive_images' => [],
+        'manipulations' => json_encode([]),
+        'custom_properties' => json_encode([]),
+        'generated_conversions' => json_encode([]),
+        'responsive_images' => json_encode([]),
         'is_active' => true,
+        'created_at' => now(),
+        'updated_at' => now(),
     ]);
-    Media::create([
+    Illuminate\Support\Facades\DB::table('media')->insert([
         'model_type' => User::class,
         'model_id' => $user->id,
         'collection_name' => 'avatar',
@@ -61,13 +59,15 @@ test('authorized user can retrieve dashboard statistics', function () {
         'file_name' => 'avatar2.png',
         'disk' => 'public',
         'size' => 600,
-        'manipulations' => [],
-        'custom_properties' => [],
-        'generated_conversions' => [],
-        'responsive_images' => [],
+        'manipulations' => json_encode([]),
+        'custom_properties' => json_encode([]),
+        'generated_conversions' => json_encode([]),
+        'responsive_images' => json_encode([]),
         'is_active' => false,
+        'created_at' => now(),
+        'updated_at' => now(),
     ]);
-    $deletedMedia = Media::create([
+    Illuminate\Support\Facades\DB::table('media')->insert([
         'model_type' => User::class,
         'model_id' => $user->id,
         'collection_name' => 'avatar',
@@ -75,37 +75,21 @@ test('authorized user can retrieve dashboard statistics', function () {
         'file_name' => 'avatar3.png',
         'disk' => 'public',
         'size' => 700,
-        'manipulations' => [],
-        'custom_properties' => [],
-        'generated_conversions' => [],
-        'responsive_images' => [],
+        'manipulations' => json_encode([]),
+        'custom_properties' => json_encode([]),
+        'generated_conversions' => json_encode([]),
+        'responsive_images' => json_encode([]),
         'is_active' => true,
+        'deleted_at' => now(),
+        'created_at' => now(),
+        'updated_at' => now(),
     ]);
-    $deletedMedia->delete();
-
-    // Categories
-    Category::factory()->create(['is_active' => true]);
-    Category::factory()->create(['is_active' => false]);
-    $deletedCategory = Category::factory()->create();
-    $deletedCategory->delete();
-
-    // Posts
-    Post::factory()->create(['status' => 'published']);
-    Post::factory()->create(['status' => 'draft']);
-    $deletedPost = Post::factory()->create();
-    $deletedPost->delete();
 
     // Pages
     Page::factory()->create(['status' => 'published']);
     Page::factory()->create(['status' => 'draft']);
     $deletedPage = Page::factory()->create();
     $deletedPage->delete();
-
-    // Menus
-    Menu::create(['name' => 'Menu 1', 'slug' => 'menu-1', 'is_active' => true]);
-    Menu::create(['name' => 'Menu 2', 'slug' => 'menu-2', 'is_active' => false]);
-    $deletedMenu = Menu::create(['name' => 'Menu 3', 'slug' => 'menu-3', 'is_active' => true]);
-    $deletedMenu->delete();
 
     // Settings
     Setting::create(['key' => 'set_1', 'name' => 'Set 1', 'value' => 'val1', 'type' => 'text', 'group' => 'general', 'is_active' => true]);
@@ -133,34 +117,16 @@ test('authorized user can retrieve dashboard statistics', function () {
             'deleted' => Permission::onlyTrashed()->count(),
         ],
         'media' => [
-            'all' => Media::count(),
-            'active' => Media::where('is_active', true)->count(),
-            'inactive' => Media::where('is_active', false)->count(),
-            'deleted' => Media::onlyTrashed()->count(),
-        ],
-        'categories' => [
-            'all' => Category::count(),
-            'active' => Category::where('is_active', true)->count(),
-            'inactive' => Category::where('is_active', false)->count(),
-            'deleted' => Category::onlyTrashed()->count(),
-        ],
-        'posts' => [
-            'all' => Post::count(),
-            'published' => Post::where('status', 'published')->count(),
-            'draft' => Post::where('status', 'draft')->count(),
-            'deleted' => Post::onlyTrashed()->count(),
+            'all' => Illuminate\Support\Facades\DB::table('media')->whereNull('deleted_at')->count(),
+            'active' => Illuminate\Support\Facades\DB::table('media')->whereNull('deleted_at')->where('is_active', true)->count(),
+            'inactive' => Illuminate\Support\Facades\DB::table('media')->whereNull('deleted_at')->where('is_active', false)->count(),
+            'deleted' => Illuminate\Support\Facades\DB::table('media')->whereNotNull('deleted_at')->count(),
         ],
         'pages' => [
             'all' => Page::count(),
             'published' => Page::where('status', 'published')->count(),
             'draft' => Page::where('status', 'draft')->count(),
             'deleted' => Page::onlyTrashed()->count(),
-        ],
-        'menus' => [
-            'all' => Menu::count(),
-            'active' => Menu::where('is_active', true)->count(),
-            'inactive' => Menu::where('is_active', false)->count(),
-            'deleted' => Menu::onlyTrashed()->count(),
         ],
         'settings' => [
             'all' => Setting::count(),
@@ -169,7 +135,7 @@ test('authorized user can retrieve dashboard statistics', function () {
             'deleted' => Setting::onlyTrashed()->count(),
         ],
     ];
-
+ 
     $this->actingAs($user, 'sanctum')
         ->getJson('/api/v1/stats')
         ->assertStatus(200)
@@ -181,10 +147,7 @@ test('authorized user can retrieve dashboard statistics', function () {
                 'roles' => ['all', 'active', 'inactive', 'deleted'],
                 'permissions' => ['all', 'active', 'inactive', 'deleted'],
                 'media' => ['all', 'active', 'inactive', 'deleted'],
-                'categories' => ['all', 'active', 'inactive', 'deleted'],
-                'posts' => ['all', 'published', 'draft', 'deleted'],
                 'pages' => ['all', 'published', 'draft', 'deleted'],
-                'menus' => ['all', 'active', 'inactive', 'deleted'],
                 'settings' => ['all', 'active', 'inactive', 'deleted'],
             ],
         ])

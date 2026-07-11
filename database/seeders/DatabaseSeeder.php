@@ -21,10 +21,5 @@ class DatabaseSeeder extends Seeder
 
         // 2. Content Modules
         $this->call(PageSeeder::class);
-        $this->call(CategorySeeder::class);
-        $this->call(PostSeeder::class);
-
-        // 3. Navigation (Last as it links to content)
-        $this->call(MenuSeeder::class);
     }
 }
